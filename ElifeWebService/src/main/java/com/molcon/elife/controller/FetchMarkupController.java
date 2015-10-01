@@ -26,7 +26,6 @@ public class FetchMarkupController {
 		String result="";
 		
 		result=fetchMarkupService.getXmlFromAmazonS3(URLDecoder.decode(doi, "UTF-8"), xpathKey);
-		//result=FetchMarkupUtil.replaceAllSpecial(result);
 		
 		return result;
 	}
