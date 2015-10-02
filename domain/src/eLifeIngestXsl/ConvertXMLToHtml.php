@@ -43,6 +43,25 @@ class ConvertXMLToHtml {
     $this->xsl = XSLString::fromString(file_get_contents(realpath(dirname(__FILE__)) . '/../../../ElifeWebService/src/main/resources' . '/' . $xsl . '.xsl'))->getValue();
   }
 
+  public function getOutput() {
+    $sections = [
+      'Abstract' => 'getAbstract',
+      'Digest' => 'getDigest',
+      'Acknowledgements' => 'getAcknowledgements',
+      'DecisionLetter' => 'getDecisionLetter',
+      'AuthorResponse' => 'getAuthorResponse',
+      'References' => 'getReferences',
+    ];
+    $output = [];
+    foreach ($sections as $section => $method) {
+      $output[] = sprintf('<!-- Start of %s //-->', $section);
+      $output[] = call_user_func([$this, $method]);
+      $output[] = sprintf('<!-- End of %s //-->', $section);
+    }
+
+    return implode(PHP_EOL . PHP_EOL, $output);
+  }
+
   /**
    * @return string
    */
