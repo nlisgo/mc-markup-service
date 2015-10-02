@@ -2,18 +2,55 @@
 
 
 use eLifeIngestXsl\ConvertXML\XMLString;
+use eLifeIngestXsl\ConvertXMLToBibtex;
 use eLifeIngestXsl\ConvertXMLToHtml;
+use eLifeIngestXsl\ConvertXMLToRis;
 
 class simpleTest extends PHPUnit_Framework_TestCase
 {
     private $jats_folder = '';
+    private $bib_folder = '';
+    private $ris_folder = '';
     private $html_folder = '';
 
-    public function setUp()
-    {
+    public function setUp() {
         $realpath = realpath(dirname(__FILE__));
         $this->jats_folder = $realpath . '/fixtures/jats/';
+        $this->bib_folder = $realpath . '/fixtures/bib/';
+        $this->ris_folder = $realpath . '/fixtures/ris/';
         $this->html_folder = $realpath . '/fixtures/html/';
+    }
+
+    public function testJatsToBibtex() {
+        $cits = glob($this->bib_folder . "*.bib");
+        $compares = [];
+
+        foreach ($cits as $cit) {
+            $file = basename($cit, '.bib');
+            $bibtex = new ConvertXMLToBibtex(XMLString::fromString(file_get_contents($this->jats_folder . $file . '.xml')));
+            $compares[] = [
+                file_get_contents($cit),
+                $bibtex->getOutput(),
+            ];
+        }
+
+        $this->runComparisons($compares);
+    }
+
+    public function testJatsToRis() {
+        $cits = glob($this->ris_folder . "*.ris");
+        $compares = [];
+
+        foreach ($cits as $cit) {
+            $file = basename($cit, '.ris');
+            $ris = new ConvertXMLToRis(XMLString::fromString(file_get_contents($this->jats_folder . $file . '.xml')));
+            $compares[] = [
+                file_get_contents($cit),
+                $ris->getOutput(),
+            ];
+        }
+
+        $this->runComparisons($compares);
     }
 
     public function testJatsToHtmlAbstract() {
