@@ -84,6 +84,31 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider xpathMatchProvider
+     */
+    public function testJatsToHtmlXpathMatch($file, $method, $xpath, $expected) {
+        $actual_html = $this->getActualHtml($file);
+        $section = call_user_func([$actual_html, $method]);
+        $found = $this->runXpath($section, $xpath);
+        $this->assertGreaterThan(0, $found->length);
+        $this->assertEquals($expected, trim($found->item(0)->nodeValue));
+    }
+
+    public function xpathMatchProvider() {
+        return [
+            ['00288-vor', 'getDecisionLetter', '//*[@class="elife-article-decision-reviewingeditor"]', 'Sema Sgaier, Reviewing editor, Bill & Melinda Gates Foundation, India'],
+        ];
+    }
+
+    protected function runXpath($html, $xpath_query) {
+        $domDoc = new DOMDocument();
+        $domDoc->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8"><actual>' . $html . '</actual>');
+        $xpath = new DOMXPath($domDoc);
+        $nodeList = $xpath->query($xpath_query);
+        return $nodeList;
+    }
+
+    /**
      * Compare the expect and actual HTML results.
      *
      * @param array[] $compares
@@ -158,6 +183,10 @@ class simpleTest extends PHPUnit_Framework_TestCase
         libxml_clear_errors();
 
         return $compares;
+    }
+
+    protected function getActualHtml($file) {
+        return new ConvertXMLToHtml(XMLString::fromString(file_get_contents($this->jats_folder . $file . '.xml')));
     }
 
     /**
