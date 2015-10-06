@@ -18,7 +18,7 @@
 	</xsl:variable>
 
 	<xsl:attribute name="id">
-		<xsl:value-of select="concat('ref-',$seq)"/>
+		<xsl:value-of select="@id"/>
 	</xsl:attribute>
 	<xsl:attribute name="data-original">
 		<xsl:value-of select="$seq"/>
@@ -42,13 +42,18 @@
 	
 	<xsl:apply-templates select="article-title"/>
 	<div class="elife-reflink-authors">
-		<xsl:apply-templates select="person-group/name"/>
+		<xsl:apply-templates select="person-group[@person-group-type='author']/name"/>
+		<xsl:apply-templates select="person-group[@person-group-type='author']/etal"/>
 	</div>
 	 <div class="elife-reflink-details">
-		<span class="elife-reflink-details-journal"><span class="nlm-source"><xsl:value-of select="source"/></span></span>,
-                <span class="elife-reflink-details-volume"><xsl:value-of select="volume"/></span>,
-                <span class="elife-reflink-details-pages"><xsl:value-of select="fpage"/>-<xsl:value-of select="lpage"/></span>,
-                <span class="elife-reflink-details-year"><xsl:value-of select="year"/></span>
+		<xsl:apply-templates select="source"/>
+                <xsl:apply-templates select="volume"/>
+		<xsl:if test="fpage">
+			<span class="elife-reflink-details-pages"><xsl:apply-templates select="fpage"/>-<xsl:apply-templates select="lpage"/></span>,
+		</xsl:if>
+                <xsl:apply-templates select="publisher-name"/>
+		<xsl:apply-templates select="publisher-loc"/>
+		<xsl:apply-templates select="year"/>
 		<xsl:if test="pub-id">
                 <div class="elife-reflink-doi-cited-wrapper">
                     <span class="elife-reflink-details-doi"><a href="http://dx.doi.org/{pub-id}">http://dx.doi.org/<xsl:value-of select="pub-id"/></a></span>
@@ -72,7 +77,15 @@
 </xsl:template>
 <xsl:template match="person-group/name">
 <xsl:variable name="authorname">
-    	<xsl:value-of select="concat(concat(given-names,' '),surname)"/>
+	<xsl:choose>
+		<xsl:when test="suffix">
+			<xsl:value-of select="concat(given-names,' ',surname,' ',suffix)"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="concat(given-names,' ',surname)"/>
+		</xsl:otherwise>
+	</xsl:choose>
+    		
 </xsl:variable>
 
 <xsl:if test="not(position() = 1)">, </xsl:if>
@@ -80,6 +93,58 @@
 		<a href="http://scholar.google.com/scholar?q=&quot;author:{$authorname}&quot;"><xsl:value-of select="$authorname"/></a>
 	</span>
 </xsl:template>
+<xsl:template match="source">
+	<span class="elife-reflink-details-journal"><span class="nlm-source"><xsl:apply-templates/></span></span>,
+</xsl:template>
+<xsl:template match="volume">
+	<span class="elife-reflink-details-volume"><xsl:apply-templates/></span>,
+</xsl:template>
+<xsl:template match="fpage">
+	<xsl:apply-templates/>
+</xsl:template>
+<xsl:template match="lpage">
+	<xsl:apply-templates/>
+</xsl:template>
+<xsl:template match="publisher-name">
+	<span class="elife-reflink-details-pub-name"><span class="nlm-publisher-name"><xsl:apply-templates/></span></span>,
+</xsl:template>
+<xsl:template match="publisher-loc">
+	 <span class="elife-reflink-details-pub-loc"><span class="nlm-publisher-loc"><xsl:apply-templates/></span></span>,
+</xsl:template>
+<xsl:template match="year">
+	<span class="elife-reflink-details-year"><xsl:apply-templates/></span>
+</xsl:template>
+<xsl:template match="etal">
+	<xsl:text> et al.</xsl:text>
+</xsl:template>
+
+  <!-- ============================================================= -->
+  <!--  Formatting elements                                          -->
+  <!-- ============================================================= -->
+
+
+<xsl:template match="italic">
+    <em>
+      <xsl:apply-templates/>
+    </em>
+ </xsl:template>
+<xsl:template match="bold">
+    <strong>
+      <xsl:apply-templates/>
+    </strong>
+  </xsl:template>
+<xsl:template match="sub">
+    <sub>
+      <xsl:apply-templates/>
+    </sub>
+  </xsl:template>
+
+
+  <xsl:template match="sup">
+    <sup>
+      <xsl:apply-templates/>
+    </sup>
+  </xsl:template>
 </xsl:stylesheet>
 
 

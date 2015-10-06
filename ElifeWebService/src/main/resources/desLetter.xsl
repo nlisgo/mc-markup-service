@@ -7,7 +7,6 @@
 	<xsl:apply-templates select="sub-article/front-stub/contrib-group/contrib"/>
 	<xsl:apply-templates select="sub-article/body"/>
 	<xsl:apply-templates select="sub-article/front-stub/article-id"/>
-	
 	</body>
 </html>
 </xsl:template>
@@ -50,7 +49,7 @@
 </div>
 </xsl:template>
 <xsl:template match="boxed-text/p">
-	 <div class="boxed-text" id="boxed-text-6">
+	 <div class="boxed-text">
 		<p><xsl:apply-templates/></p>
 	</div>
 </xsl:template>
