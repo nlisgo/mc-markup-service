@@ -83,6 +83,16 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $this->runHtmlComparisons($compares);
     }
 
+    public function testJatsToHtmlDoiAbstract() {
+        $compares = $this->compareDoiHtmlSection('abstract');
+        $this->runHtmlComparisons($compares);
+    }
+
+    public function testJatsToHtmlDoiTableWrap() {
+        $compares = $this->compareDoiHtmlSection('table-wrap');
+        $this->runHtmlComparisons($compares);
+    }
+
     /**
      * @dataProvider xpathMatchProvider
      */
@@ -132,7 +142,8 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * Prepare array of actual and expected results for DOI HTML.
      */
-    protected function compareDoiHtmlSection($suffix) {
+    protected function compareDoiHtmlSection($fragment_suffix) {
+        $suffix = '-doi-' . $fragment_suffix;
         $htmls = glob($this->html_folder . '*' . $suffix . '.html');
         $sections = [];
 
@@ -148,7 +159,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $compares = [];
 
         foreach ($sections as $section) {
-            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', $section['doi']));
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', [$section['doi'], $fragment_suffix]));
         }
 
         return $compares;
