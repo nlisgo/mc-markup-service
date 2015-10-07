@@ -146,6 +146,9 @@ class ConvertXMLToHtml {
           case 'media':
             $xsl = 'media';
             break;
+          case 'sub-article':
+            $xsl = 'authorResponse';
+            break;
           case 'supplementary-material':
             $xsl = 'supplementary-material';
             break;
@@ -179,8 +182,8 @@ class ConvertXMLToHtml {
    * @return string
    */
   public function getDoi($doi) {
-    $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group";
-    $xpath_query = sprintf($xpath_string, $doi, $doi);
+    $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group | //article-id[@pub-id-type='doi' and text()='%s']/ancestor::sub-article";
+    $xpath_query = sprintf($xpath_string, $doi, $doi, $doi);
     return $this->getSection($xpath_query, TRUE);
   }
 
