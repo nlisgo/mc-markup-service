@@ -20,15 +20,14 @@
 </div>
 </xsl:template>
 <xsl:template match="name">
-	<xsl:apply-templates select="given-names"/>
-	<xsl:apply-templates select="surname"/>
+	<span class="nlm-given-names"><xsl:apply-templates select="given-names"/></span><xsl:text> </xsl:text><span class="nlm-surname"><xsl:apply-templates select="surname"/></span>
 </xsl:template>
 
 <xsl:template match="given-names">
-	<span class="nlm-given-names"><xsl:value-of select="."/></span>
+	<xsl:apply-templates/>
 </xsl:template>
 <xsl:template match="surname">
-	<span class="nlm-surname"><xsl:value-of select="."/></span>
+	<xsl:apply-templates/>
 </xsl:template>
 <xsl:template match="aff">
 	<xsl:apply-templates select="institution"/>, <xsl:apply-templates select="country"/>
