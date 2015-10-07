@@ -183,7 +183,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $compares = [];
 
         foreach ($sections as $section) {
-            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', [$section['doi'], $fragment_suffix], ''));
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', $section['doi'], ''));
         }
 
         return $compares;
