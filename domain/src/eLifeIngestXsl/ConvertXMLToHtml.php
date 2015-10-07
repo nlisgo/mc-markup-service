@@ -118,7 +118,7 @@ class ConvertXMLToHtml {
    * @param string $xpath_query
    * @return string
    */
-  public function getSection($xpath_query) {
+  public function getSection($xpath_query, $detect_xsl = FALSE) {
     libxml_use_internal_errors(TRUE);
     $actual = new DOMDocument;
     $actual->loadXML($this->getXML());
@@ -127,7 +127,37 @@ class ConvertXMLToHtml {
 
     if (!empty($elements) && $elements->length > 0) {
       $new = new DOMDocument;
-      $new->appendChild($new->importNode($elements->item(0), TRUE));
+      $item = $elements->item(0);
+      if ($detect_xsl) {
+        $xsl = NULL;
+        switch ($item->nodeName) {
+          case 'abstract':
+            $xsl = 'abstract';
+            break;
+          case 'boxed-text':
+            $xsl = 'boxedText';
+            break;
+          case 'fig':
+            $xsl = 'fig';
+            break;
+          case 'fig-group':
+            $xsl = 'fig';
+            break;
+          case 'media':
+            $xsl = 'media';
+            break;
+          case 'supplementary-material':
+            $xsl = 'supplementary-material';
+            break;
+          case 'table-wrap':
+            $xsl = 'tableWrap';
+            break;
+        }
+        if ($xsl) {
+          $this->setXSL($xsl);
+        }
+      }
+      $new->appendChild($new->importNode($item, TRUE));
 
       $xsl = new DOMDocument;
       $xsl->loadXML($this->getXSL());
@@ -148,38 +178,10 @@ class ConvertXMLToHtml {
    * @param string $fragment_type
    * @return string
    */
-  public function getDoi($doi, $fragment_type) {
-    $xsl = NULL;
-    switch ($fragment_type) {
-      case 'abstract':
-        $xsl = 'abstract';
-        break;
-      case 'boxed-text':
-        $xsl = 'boxedText';
-        break;
-      case 'fig':
-        $xsl = 'fig';
-        break;
-      case 'fig-group':
-        $xsl = 'fig';
-        break;
-      case 'media':
-        $xsl = 'media';
-        break;
-      case 'supplementary-material':
-        $xsl = 'supplementary-material';
-        break;
-      case 'table-wrap':
-        $xsl = 'tableWrap';
-        break;
-    }
-    if ($xsl) {
-      $this->setXSL($xsl);
-      return $this->getSection("//object-id[text()='" . $doi . "']/..");
-      $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group";
-      $xpath_query = sprintf($xpath_string, $doi, $doi);
-      return $this->getSection($xpath_query);
-    }
+  public function getDoi($doi) {
+    $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group";
+    $xpath_query = sprintf($xpath_string, $doi, $doi);
+    return $this->getSection($xpath_query, TRUE);
   }
 
   /**
