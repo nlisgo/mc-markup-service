@@ -60,6 +60,9 @@ public static String getXpathByKey(String key,String doi){
 	case "Fragment":
 		xpath="//object-id[text()=\""+doi+"\"]/..";
 		break;
+	case "fig":
+		xpath="//object-id[text()=\""+doi+"\"]/../..";
+		break;
 	default:
 		break;
 	}
@@ -93,6 +96,21 @@ public static String getXslFile(String key){
 		break;
 	case "table-wrap":
 		xslFile="tableWrap.xsl";
+		break;
+	case "boxed-text":
+		xslFile="boxedText.xsl";
+		break;
+	case "media":
+		xslFile="media.xsl";
+		break;
+	case "supplementary-material":
+		xslFile="supplementary-material.xsl";
+		break;
+	case "fig":
+		xslFile="fig.xsl";
+		break;
+	case "fig-group":
+		xslFile="fig-group.xsl";
 		break;
 	case "Datasets":
 		break;
