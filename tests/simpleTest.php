@@ -1,6 +1,5 @@
 <?php
 
-
 use eLifeIngestXsl\ConvertXML\XMLString;
 use eLifeIngestXsl\ConvertXMLToBibtex;
 use eLifeIngestXsl\ConvertXMLToHtml;
@@ -54,32 +53,32 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     public function testJatsToHtmlAbstract() {
-        $compares = $this->compareHtmlSection('-section-abstract', 'getAbstract');
+        $compares = $this->compareHtmlSection('abstract', 'getAbstract');
         $this->runHtmlComparisons($compares);
     }
 
     public function testJatsToHtmlDigest() {
-        $compares = $this->compareHtmlSection('-section-digest', 'getDigest');
+        $compares = $this->compareHtmlSection('digest', 'getDigest');
         $this->runHtmlComparisons($compares);
     }
 
     public function testJatsToHtmlDecisionLetter() {
-        $compares = $this->compareHtmlSection('-section-decision-letter', 'getDecisionLetter');
+        $compares = $this->compareHtmlSection('decision-letter', 'getDecisionLetter');
         $this->runHtmlComparisons($compares);
     }
 
     public function testJatsToHtmlAuthorResponse() {
-        $compares = $this->compareHtmlSection('-section-author-response', 'getAuthorResponse');
+        $compares = $this->compareHtmlSection('author-response', 'getAuthorResponse');
         $this->runHtmlComparisons($compares);
     }
 
     public function testJatsToHtmlAcknowledgements() {
-        $compares = $this->compareHtmlSection('-section-acknowledgements', 'getAcknowledgements');
+        $compares = $this->compareHtmlSection('acknowledgements', 'getAcknowledgements');
         $this->runHtmlComparisons($compares);
     }
 
     public function testJatsToHtmlReferences() {
-        $compares = $this->compareHtmlSection('-section-references', 'getReferences');
+        $compares = $this->compareHtmlSection('references', 'getReferences');
         $this->runHtmlComparisons($compares);
     }
 
@@ -159,7 +158,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $compares = [];
 
         foreach ($sections as $section) {
-            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', [$section['doi'], $fragment_suffix]));
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', [$section['doi'], $fragment_suffix], ''));
         }
 
         return $compares;
@@ -168,18 +167,19 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * Prepare array of actual and expected results.
      */
-    protected function compareHtmlSection($suffix, $method, $params = []) {
+    protected function compareHtmlSection($type, $method, $params = [], $suffix = '-section-') {
+        $section_suffix = $suffix . $type;
         if (is_string($params)) {
             $params = [$params];
         }
         $html_prefix = '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
         $expected = 'expected';
-        $htmls = glob($this->html_folder . "*" . $suffix . ".html");
+        $htmls = glob($this->html_folder . "*" . $section_suffix . ".html");
         $compares = [];
 
         libxml_use_internal_errors(TRUE);
-          foreach ($htmls as $html) {
-            $file = str_replace($suffix, '', basename($html, '.html'));
+        foreach ($htmls as $html) {
+            $file = str_replace($section_suffix, '', basename($html, '.html'));
             $actual_html = new ConvertXMLToHtml(XMLString::fromString(file_get_contents($this->jats_folder . $file . '.xml')));
 
             $expectedDom = new DOMDocument();
