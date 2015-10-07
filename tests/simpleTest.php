@@ -87,6 +87,26 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $this->runHtmlComparisons($compares);
     }
 
+    public function testJatsToHtmlDoiBoxedText() {
+        $compares = $this->compareDoiHtmlSection('boxed-text');
+        $this->runHtmlComparisons($compares);
+    }
+
+    public function testJatsToHtmlDoiFig() {
+        $compares = $this->compareDoiHtmlSection('fig');
+        $this->runHtmlComparisons($compares);
+    }
+
+    public function testJatsToHtmlDoiMedia() {
+        $compares = $this->compareDoiHtmlSection('media');
+        $this->runHtmlComparisons($compares);
+    }
+
+    public function testJatsToHtmlDoiSupplementaryMaterial() {
+        $compares = $this->compareDoiHtmlSection('supplementary-material');
+        $this->runHtmlComparisons($compares);
+    }
+
     public function testJatsToHtmlDoiTableWrap() {
         $compares = $this->compareDoiHtmlSection('table-wrap');
         $this->runHtmlComparisons($compares);

@@ -154,6 +154,18 @@ class ConvertXMLToHtml {
       case 'abstract':
         $xsl = 'abstract';
         break;
+      case 'boxed-text':
+        $xsl = 'boxedText';
+        break;
+      case 'fig':
+        $xsl = 'fig';
+        break;
+      case 'media':
+        $xsl = 'media';
+        break;
+      case 'supplementary-material':
+        $xsl = 'supplementary-material';
+        break;
       case 'table-wrap':
         $xsl = 'tableWrap';
         break;
