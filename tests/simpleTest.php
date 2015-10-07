@@ -97,6 +97,11 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $this->runHtmlComparisons($compares);
     }
 
+    public function testJatsToHtmlDoiFigGroup() {
+        $compares = $this->compareDoiHtmlSection('fig-group');
+        $this->runHtmlComparisons($compares);
+    }
+
     public function testJatsToHtmlDoiMedia() {
         $compares = $this->compareDoiHtmlSection('media');
         $this->runHtmlComparisons($compares);

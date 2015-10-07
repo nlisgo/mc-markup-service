@@ -138,7 +138,7 @@ class ConvertXMLToHtml {
       $proc->importStyleSheet($xsl);
 
       $output = $proc->transformToXML($new);
-      $actual->loadXML($output);
+      $actual->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $output);
       return $this->getInnerHtml($actual->getElementsByTagName('body')->item(0));
     }
   }
@@ -160,6 +160,9 @@ class ConvertXMLToHtml {
       case 'fig':
         $xsl = 'fig';
         break;
+      case 'fig-group':
+        $xsl = 'fig';
+        break;
       case 'media':
         $xsl = 'media';
         break;
@@ -173,6 +176,9 @@ class ConvertXMLToHtml {
     if ($xsl) {
       $this->setXSL($xsl);
       return $this->getSection("//object-id[text()='" . $doi . "']/..");
+      $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group";
+      $xpath_query = sprintf($xpath_string, $doi, $doi);
+      return $this->getSection($xpath_query);
     }
   }
 
