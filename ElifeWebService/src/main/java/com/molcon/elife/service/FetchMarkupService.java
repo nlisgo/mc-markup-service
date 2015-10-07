@@ -50,15 +50,15 @@ public class FetchMarkupService {
 	  
 		logAccessWebService(doi, xpathKey);
 		
-		
-		Pattern pattern=Pattern.compile("(eLife\\.)([0-9]+)");
+		Pattern pattern=Pattern.compile("(eLife\\.)([0-9]+)(\\.[0-9]+)?");
 		Matcher matcher=pattern.matcher(doi);
 		String elifeFolder=null;
+		String fragment=null;
 		while(matcher.find()){
 			elifeFolder=matcher.group(2);
+			fragment=matcher.group(3);
 		}
 		
-		doi=doi.substring(8).toLowerCase().replace(".", "");
 		
 	    String url="https://s3.amazonaws.com/elife-cdn/elife-articles/"+elifeFolder+"/"+"elife"+elifeFolder+".xml";
 	    
@@ -82,7 +82,7 @@ public class FetchMarkupService {
 		XPath xpath = factory.newXPath();
 		
 		//get the xpath w.r.t key
-		String expression=FetchMarkupUtil.getXpathByKey(xpathKey);
+		String expression=FetchMarkupUtil.getXpathByKey(xpathKey,doi);
 		
 		//xpath evaluation
 		StringBuilder xpathContent=new StringBuilder();
@@ -90,6 +90,9 @@ public class FetchMarkupService {
 		if(node==null){
 			return "No Data for selected key :"+xpathKey;
 		} 
+		if(fragment!=null){
+			xpathKey=node.getNodeName();
+		}
 		
 		Element mainElement=(Element)node;
 		mainElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");

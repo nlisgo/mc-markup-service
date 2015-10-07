@@ -33,7 +33,7 @@ public static void downloadFromUrl(String urlStr,String file)throws Exception{
         
         System.out.println("download done...");
 	}
-public static String getXpathByKey(String key){
+public static String getXpathByKey(String key,String doi){
 	
 	String xpath="";
 	switch (key) {
@@ -56,6 +56,9 @@ public static String getXpathByKey(String key){
 		xpath="//sub-article[@article-type=\"reply\"]";
 		break;
 	case "Datasets":
+		break;
+	case "Fragment":
+		xpath="//object-id[text()=\""+doi+"\"]/..";
 		break;
 	default:
 		break;
@@ -84,6 +87,12 @@ public static String getXslFile(String key){
 		break;
 	case "Author response":
 		xslFile="authorResponse.xsl";
+		break;
+	case "abstract":
+		xslFile="abstract.xsl";
+		break;
+	case "table-wrap":
+		xslFile="tableWrap.xsl";
 		break;
 	case "Datasets":
 		break;

@@ -20,7 +20,7 @@ public class FetchMarkupController {
 	
 	@RequestMapping(value="/{doi1:.+}/{doi2:.+}/{xpathKey}",method=RequestMethod.GET)
 	public String getMarkup(@PathVariable String doi1,@PathVariable String doi2,@PathVariable String xpathKey)throws Exception{
-		String doi=doi1+doi2; 
+		String doi=doi1+"/"+doi2; 
 		System.out.println("web service(3 param) doi :" +(doi)+" xpath key :"+xpathKey);
 		System.out.println("web service(3 param) doi :" +URLDecoder.decode(doi, "UTF-8")+" xpath key :"+xpathKey);
 		String result="";
@@ -31,26 +31,24 @@ public class FetchMarkupController {
 	}
 	@RequestMapping(value="/{doi:.+}/{xpathKey}",method=RequestMethod.GET)
 	public String getMarkup(@PathVariable String doi,@PathVariable String xpathKey)throws Exception{
-		 
 		System.out.println("web service(2 param) doi :" +(doi)+" xpath key :"+xpathKey);
 		System.out.println("web service(2 param) doi :" +URLDecoder.decode(doi, "UTF-8")+" xpath key :"+xpathKey);
+		if(xpathKey.contains("eLife")){
+			doi=doi+"/"+xpathKey;
+			xpathKey="Fragment";
+		}
 		String result="";
-		
 		result=fetchMarkupService.getXmlFromAmazonS3(URLDecoder.decode(doi, "UTF-8"), xpathKey);
 		
 		return result;
 	}
-	@RequestMapping(value="/{xpathKey}",method=RequestMethod.GET)
-	public String getMarkup(@PathVariable String xpathKey)throws Exception{
-		
-		String doi="10.7554%2FeLife.00288";
-		System.out.println("web service doi :" +URLDecoder.decode(doi, "UTF-8")+" xpath key :"+xpathKey);
+	@RequestMapping(value="/{doi:.+}",method=RequestMethod.GET)
+	public String getMarkup(@PathVariable String doi)throws Exception{
+		System.out.println("web service(1 param) doi :" +(doi));
 		String result="";
-		if(!xpathKey.equals("References")){
-			result="xpathKey must be References";
-		}else{
-			result=fetchMarkupService.getXmlFromAmazonS3(URLDecoder.decode(doi, "UTF-8"), xpathKey);
-		}
+		String xpathKey="Fragment";
+		result=fetchMarkupService.getXmlFromAmazonS3(URLDecoder.decode(doi, "UTF-8"), xpathKey);
+		
 		return result;
 	}
 }
