@@ -144,6 +144,27 @@ class ConvertXMLToHtml {
   }
 
   /**
+   * @param string $doi
+   * @param string $fragment_type
+   * @return string
+   */
+  public function getDoi($doi, $fragment_type) {
+    $xsl = NULL;
+    switch ($fragment_type) {
+      case 'abstract':
+        $xsl = 'abstract';
+        break;
+      case 'table-wrap':
+        $xsl = 'tableWrap';
+        break;
+    }
+    if ($xsl) {
+      $this->setXSL($xsl);
+      return $this->getSection("//object-id[text()='" . $doi . "']/..");
+    }
+  }
+
+  /**
    * @param DOMNode $node
    * @return string
    */
