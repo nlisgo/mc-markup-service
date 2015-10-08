@@ -12,15 +12,18 @@
 	<xsl:variable name="title">
     		<xsl:value-of select="label"/>
 	</xsl:variable>
+	<xsl:variable name="linkFile">
+    		<xsl:value-of select="graphic/@xlink:href"/>
+	</xsl:variable>
 
 <div id="{@id}" class="fig-inline-img-set">
 	<div class="elife-fig-image-caption-wrapper">
 		<div class="fig-expansion">
 			<div class="fig-inline-img">
-                		<a href="[graphic-elife00288f005-large]" class="figure-expand-popup" title="{$title}"><img data-img="[graphic-elife00288f005-small]" src="[graphic-elife00288f005-medium]" alt="{$title}" /></a>
+                		<a href="[graphic-{$linkFile}-large]" class="figure-expand-popup" title="{$title}"><img data-img="[graphic-{$linkFile}-small]" src="[graphic-{$linkFile}-medium]" alt="{$title}" /></a>
             		</div>
 			<div class="fig-caption">
-				<span class="elife-figure-links"><span class="elife-figure-link elife-figure-link-download"><a href="[graphic-elife00288f005-large-download]">Download figure</a></span><span class="elife-figure-link elife-figure-link-newtab"><a href="[graphic-elife00288f005-large]" target="_new">Open in new tab</a></span></span>
+				<span class="elife-figure-links"><span class="elife-figure-link elife-figure-link-download"><a href="[graphic-{$linkFile}-large-download]">Download figure</a></span><span class="elife-figure-link elife-figure-link-newtab"><a href="[graphic-{$linkFile}-large]" target="_new">Open in new tab</a></span></span>
 				<xsl:apply-templates select="label"/>
 				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="caption"/>

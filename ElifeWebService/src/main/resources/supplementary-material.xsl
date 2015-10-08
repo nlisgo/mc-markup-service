@@ -12,7 +12,7 @@
 <div class="supplementary-material-expansion" id="{@id}">
 	<xsl:apply-templates select="label"/>
 	<xsl:apply-templates select="caption/p"/>
-	<span class="inline-linked-media-wrapper"><a href="[media-elife00288s003-download]"><i class="icon-download-alt"></i> Download source data<span class="inline-linked-media-filename">[figure-4—source-data-1.media-3.xlsx]</span></a></span>
+	<xsl:apply-templates select="media"/>
 </div>
 </xsl:template>
 <xsl:template match="label">
@@ -22,6 +22,22 @@
 	<p><xsl:apply-templates/></p>
 </xsl:template>
 
+<xsl:template match="media">
+<xsl:variable name="fileId">
+    		<xsl:value-of select="../@id"/>
+</xsl:variable>
+
+<xsl:variable name="mediaLinkFile">
+    		<xsl:value-of select="substring-before(@xlink:href, '.')"/>
+</xsl:variable>
+<xsl:variable name="fileName">
+    		<xsl:value-of select="concat('[',../label,'media-',substring($fileId, 3, 1),'.xlsx]')"/>
+</xsl:variable>
+<xsl:variable name="mediaLink">
+    		<xsl:value-of select="concat('[media-',$mediaLinkFile,'-download]')"/>
+</xsl:variable>
+<span class="inline-linked-media-wrapper"><a href="{$mediaLink}"><i class="icon-download-alt"></i> Download source data<span class="inline-linked-media-filename"><xsl:value-of select="$fileName"/></span></a></span>
+</xsl:template>
 
  <!-- ============================================================= -->
   <!--  Formatting elements                                          -->
@@ -30,6 +46,7 @@
 <xsl:template match="*[@ext-link-type = 'doi' and @xlink:href]">
 			 <a href="/lookup/doi/{@xlink:href}"><xsl:apply-templates/></a>
 </xsl:template>
+
 <xsl:template match="italic">
     <em>
       <xsl:apply-templates/>

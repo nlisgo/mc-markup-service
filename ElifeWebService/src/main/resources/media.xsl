@@ -9,12 +9,18 @@
 </html>
 </xsl:template>
 <xsl:template match="media">
+<xsl:variable name="videoFile">
+    		<xsl:value-of select="concat('[video-',@id,'-inline]')"/>
+</xsl:variable>
+<xsl:variable name="VideoLink">
+    		<xsl:value-of select="concat('[video-',@id,'-download]')"/>
+</xsl:variable>
 <div class="media video-content" id="{@id}">
 	<div class="media-inline video-inline">
 		<div class="elife-inline-video">
-			[video-video8-inline]
+			<xsl:value-of select="$videoFile"/>
 			<div class="elife-video-links"><span class="elife-video-link elife-video-link-download">
-				<a href="[video-video8-download]">Download Video</a></span>
+				<a href="{$VideoLink}">Download Video</a></span>
 			</div>
 		</div>
 	</div>
