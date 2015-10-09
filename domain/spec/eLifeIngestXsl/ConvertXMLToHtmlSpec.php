@@ -88,6 +88,7 @@ class ConvertXMLToHtmlSpec extends ObjectBehavior {
         $to = ['>', '<', '\\1', '><'];
         $clean_actual = preg_replace($from, $to, $this->getInnerHtml($actualDom->getElementsByTagName($wrapper)->item(0)));
         $clean_expected = preg_replace($from, $to, $this->getInnerHtml($expectedDom->getElementsByTagName($wrapper)->item(0)));
+        libxml_clear_errors();
 
         if ($clean_actual != $clean_expected) {
           throw new FailureException(sprintf('Expected "%s" but found "%s".', $clean_expected, $clean_actual));
