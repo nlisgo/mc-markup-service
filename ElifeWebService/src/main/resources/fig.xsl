@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
-
+<xsl:import href="supplementary-material.xsl"/>
 <xsl:template match="/">
 <html>
 	<body>
@@ -44,36 +44,24 @@
 	<span class="caption-title"><xsl:apply-templates/></span>
 </xsl:template>
 <xsl:template match="p">
-	<p><xsl:apply-templates/></p>
+	<xsl:choose>
+		<xsl:when test="child::supplementary-material">
+			<xsl:apply-templates select="supplementary-material"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<p><xsl:apply-templates/></p>
+		</xsl:otherwise>
+	</xsl:choose>
+	
+</xsl:template>
+<xsl:template match="supplementary-material">
+		<xsl:variable name="dataDoi">
+			<xsl:value-of select="object-id"/>
+		</xsl:variable>	
+		<div class="supplementary-material" data-doi="{$dataDoi}">
+			<xsl:apply-imports/>
+		</div>	
 </xsl:template>
 
-
- <!-- ============================================================= -->
-  <!--  Formatting elements                                          -->
-  <!-- ============================================================= -->
-
-<xsl:template match="*[@ext-link-type = 'doi' and @xlink:href]">
-			 <a href="/lookup/doi/{@xlink:href}"><xsl:apply-templates/></a>
-</xsl:template>
-<xsl:template match="italic">
-    <em>
-      <xsl:apply-templates/>
-    </em>
- </xsl:template>
-<xsl:template match="bold">
-    <strong>
-      <xsl:apply-templates/>
-    </strong>
-  </xsl:template>
-<xsl:template match="sub">
-    <sub>
-      <xsl:apply-templates/>
-    </sub>
-  </xsl:template>
-
-  <xsl:template match="sup">
-    <sup>
-      <xsl:apply-templates/>
-    </sup>
-  </xsl:template>
+<xsl:include href="formatting.xsl" />
 </xsl:stylesheet>

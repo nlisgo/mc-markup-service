@@ -58,10 +58,7 @@ public static String getXpathByKey(String key,String doi){
 	case "Datasets":
 		break;
 	case "Fragment":
-		xpath="//object-id[text()=\""+doi+"\"]/..";
-		break;
-	case "fig":
-		xpath="//object-id[text()=\""+doi+"\"]/../..";
+		xpath="//object-id[@pub-id-type=\"doi\" and text()=\""+doi+"\"][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type=\"doi\" and text()=\""+doi+"\"][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group | //article-id[@pub-id-type=\"doi\" and text()=\""+doi+"\"]/ancestor::sub-article";
 		break;
 	default:
 		break;
@@ -77,7 +74,7 @@ public static String getXslFile(String key){
 		xslFile="abstract.xsl";
 		break;
 	case "Digest":
-		xslFile="digest.xsl";
+		xslFile="abstract.xsl";
 			break;
 	case "References":
 		xslFile="reference.xsl";

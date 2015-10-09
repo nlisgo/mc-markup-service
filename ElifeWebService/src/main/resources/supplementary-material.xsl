@@ -39,33 +39,5 @@
 <span class="inline-linked-media-wrapper"><a href="{$mediaLink}"><i class="icon-download-alt"></i> Download source data<span class="inline-linked-media-filename"><xsl:value-of select="$fileName"/></span></a></span>
 </xsl:template>
 
- <!-- ============================================================= -->
-  <!--  Formatting elements                                          -->
-  <!-- ============================================================= -->
-
-<xsl:template match="*[@ext-link-type = 'doi' and @xlink:href]">
-			 <a href="/lookup/doi/{@xlink:href}"><xsl:apply-templates/></a>
-</xsl:template>
-
-<xsl:template match="italic">
-    <em>
-      <xsl:apply-templates/>
-    </em>
- </xsl:template>
-<xsl:template match="bold">
-    <strong>
-      <xsl:apply-templates/>
-    </strong>
-  </xsl:template>
-<xsl:template match="sub">
-    <sub>
-      <xsl:apply-templates/>
-    </sub>
-  </xsl:template>
-
-  <xsl:template match="sup">
-    <sup>
-      <xsl:apply-templates/>
-    </sup>
-  </xsl:template>
+<xsl:include href="formatting.xsl" />
 </xsl:stylesheet>

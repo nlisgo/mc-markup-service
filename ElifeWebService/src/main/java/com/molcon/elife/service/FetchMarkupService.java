@@ -93,23 +93,6 @@ public class FetchMarkupService {
 		if(fragment!=null){
 			xpathKey=node.getNodeName();
 		}
-		//if node is fig then get the parent node by applying new xpath upto parent
-		if(xpathKey.equals("fig")){
-			 Node figNode=node;
-			 expression=FetchMarkupUtil.getXpathByKey(xpathKey,doi);
-			//xpath evaluation
-			 xpathContent=new StringBuilder();
-			 node=(Node)xpath.evaluate(expression, doc, XPathConstants.NODE);
-			 if(node==null){
-					return "No Data for selected key :"+xpathKey;
-			 }
-			 xpathKey=node.getNodeName();
-			 if(!xpathKey.equals("fig-group")){
-				 node=figNode;
-				 xpathKey="fig";
-			 }
-			 
-		}
 		Element mainElement=(Element)node;
 		mainElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		
