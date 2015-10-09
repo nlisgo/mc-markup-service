@@ -21,7 +21,7 @@ class ConvertXMLToHtml {
   /**
    * @var string
    */
-  private $html;
+  private $file;
 
   /**
    * @param XMLString $xml
@@ -38,9 +38,17 @@ class ConvertXMLToHtml {
     return XSLString::fromString($this->xsl);
   }
 
+  private function setFile($xsl) {
+    $this->file = realpath(dirname(__FILE__)) . '/../../../ElifeWebService/src/main/resources/' . $xsl . '.xsl';
+  }
+
+  private function getFile() {
+    return $this->file;
+  }
+
   private function setXSL($xsl) {
-    realpath(dirname(__FILE__));
-    $this->xsl = XSLString::fromString(file_get_contents(realpath(dirname(__FILE__)) . '/../../../ElifeWebService/src/main/resources' . '/' . $xsl . '.xsl'))->getValue();
+    $this->setFile($xsl);
+    $this->xsl = XSLString::fromString(file_get_contents($this->getFile()))->getValue();
   }
 
   public function getOutput() {
@@ -164,14 +172,16 @@ class ConvertXMLToHtml {
 
       $xsl = new DOMDocument;
       $xsl->loadXML($this->getXSL());
+      $xsl->documentURI = $this->getFile();
 
       // Configure the transformer.
       $proc = new XSLTProcessor;
       // Attach the xsl rules.
-      $proc->importStyleSheet($xsl);
+      $proc->importStylesheet($xsl);
 
       $output = $proc->transformToXML($new);
       $actual->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $output);
+      libxml_clear_errors();
       return $this->getInnerHtml($actual->getElementsByTagName('body')->item(0));
     }
   }
