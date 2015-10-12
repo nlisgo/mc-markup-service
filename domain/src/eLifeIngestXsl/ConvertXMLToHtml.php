@@ -149,7 +149,7 @@ class ConvertXMLToHtml {
             $xsl = 'fig';
             break;
           case 'fig-group':
-            $xsl = 'fig';
+            $xsl = 'fig-group';
             break;
           case 'media':
             $xsl = 'media';
