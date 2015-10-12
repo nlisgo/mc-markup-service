@@ -30,8 +30,12 @@
 <xsl:variable name="mediaLinkFile">
     		<xsl:value-of select="substring-before(@xlink:href, '.')"/>
 </xsl:variable>
+<xsl:variable name="labelFormattedValue">
+    		<xsl:value-of select="translate(translate(../label,'F','f'),' ', '-')"/>
+</xsl:variable>
+
 <xsl:variable name="fileName">
-    		<xsl:value-of select="concat('[',../label,'media-',substring($fileId, 3, 1),'.xlsx]')"/>
+    		<xsl:value-of select="concat('[',$labelFormattedValue,'media-',substring($fileId, 3, 1),'.xlsx]')"/>
 </xsl:variable>
 <xsl:variable name="mediaLink">
     		<xsl:value-of select="concat('[media-',$mediaLinkFile,'-download]')"/>
