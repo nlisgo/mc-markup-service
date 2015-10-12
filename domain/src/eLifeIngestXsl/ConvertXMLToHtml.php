@@ -82,7 +82,7 @@ class ConvertXMLToHtml {
    * @return string
    */
   public function getDigest() {
-    $this->setXSL('digest');
+    $this->setXSL('abstract');
     return $this->getSection("//abstract[@abstract-type='executive-summary']");
   }
 
