@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML">
 
 <xsl:template match="/">
 <html>
@@ -17,7 +17,9 @@
 		<div class="sb-div caption-clear"></div>
 	</div>
 		<xsl:apply-templates select="table"/>
-	<div class="table-foot"></div>
+	<div class="table-foot"><ul class="table-footnotes">
+		<xsl:apply-templates select="table-wrap-foot/fn"/>
+	</ul></div>
 </div>
 </xsl:template>
 
@@ -44,7 +46,46 @@
 	<tr><xsl:apply-templates select="td"/></tr>
 </xsl:template>
 <xsl:template match="td">
-	<td rowspan="1" colspan="1"><xsl:apply-templates/></td>
+	<xsl:choose>
+		<xsl:when test="child::inline-formula">
+					
+					<xsl:apply-templates select="inline-formula"/>
+				
+		</xsl:when>
+		<xsl:otherwise>
+			<td rowspan="1" colspan="1"><xsl:apply-templates/></td>
+		</xsl:otherwise>
+	</xsl:choose>
+	
+</xsl:template>
+
+<xsl:template match="inline-formula">
+	<td rowspan="1" colspan="1"><span class="inline-formula"><span class="mathjax mml-math">
+			<xsl:apply-templates select="mml:math"/>
+	</span></span></td>
+</xsl:template>
+
+<xsl:template match="node()|@*">
+<xsl:copy>
+	<xsl:apply-templates select="node()|@*"/>
+</xsl:copy>
+</xsl:template>
+
+<xsl:template match="@overflow|@id"/>
+
+<xsl:template match="*[@ref-type = 'bibr' and @rid]">
+		<a class="xref-bibr" href="#{@rid}"><xsl:apply-templates/></a>
+</xsl:template>
+<xsl:template match="*[@ref-type = 'table' and @rid]">
+		<span class="xref-table"><xsl:apply-templates/></span>
+</xsl:template>
+
+<xsl:template match="table-wrap-foot/fn">
+	<li class="fn"><xsl:apply-templates select="p"/></li>
+</xsl:template>
+
+<xsl:template match="p">
+	<p><xsl:apply-templates/></p>
 </xsl:template>
 
 <xsl:include href="formatting.xsl" />

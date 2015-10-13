@@ -34,7 +34,15 @@
 </div>
 </xsl:template>
 <xsl:template match="label">
-	<span class="fig-label"><xsl:apply-templates/></span>
+	<xsl:choose>
+		<xsl:when test="parent::fig">
+			<span class="fig-label"><xsl:apply-templates/></span>
+		</xsl:when>
+		<xsl:otherwise>
+			<span class="supplementary-material-label"><xsl:apply-templates/></span>
+		</xsl:otherwise>
+	</xsl:choose>
+	
 </xsl:template>
 <xsl:template match="caption">
 	<xsl:apply-templates select="title"/>

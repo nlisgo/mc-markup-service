@@ -11,12 +11,13 @@
 				<xsl:variable name="title">
     					<xsl:value-of select="label"/>
 				</xsl:variable>
-				<xsl:variable name="linkFile">
+
+				<xsl:variable name="figLinkFile">
     					<xsl:value-of select="graphic/@xlink:href"/>
 				</xsl:variable>
 				<xsl:if test="not(@specific-use)">
 					<div class="elife-fig-slider-img elife-fig-slider-primary">
-						<img src="[graphic-{$linkFile}-small]" alt="{$title}"/>
+						<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
    					</div>
 				</xsl:if>
 			</xsl:for-each>
@@ -28,12 +29,12 @@
 						<xsl:variable name="title">
     							<xsl:value-of select="label"/>
 						</xsl:variable>
-						<xsl:variable name="linkFile">
+						<xsl:variable name="figLinkFile">
 		    					<xsl:value-of select="graphic/@xlink:href"/>
 						</xsl:variable>
 						<xsl:if test="@specific-use">
 							 <div class="elife-fig-slider-img elife-fig-slider-secondary">
-								<img src="[graphic-${linkFile}-small]" alt="{$title}"/>
+								<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
 			    				</div>
 						</xsl:if>
 					</xsl:for-each>
@@ -57,4 +58,5 @@
 			<xsl:apply-imports/>
 		</div>	
 </xsl:template>
+<xsl:include href="formatting.xsl" />
 </xsl:stylesheet>
