@@ -17,9 +17,11 @@
 		<div class="sb-div caption-clear"></div>
 	</div>
 		<xsl:apply-templates select="table"/>
-	<div class="table-foot"><ul class="table-footnotes">
-		<xsl:apply-templates select="table-wrap-foot/fn"/>
-	</ul></div>
+	<xsl:if test="table-wrap-foot">
+		<div class="table-foot"><ul class="table-footnotes">
+			<xsl:apply-templates select="table-wrap-foot/fn"/>
+		</ul></div>
+	</xsl:if>
 </div>
 </xsl:template>
 
@@ -40,7 +42,7 @@
 	<thead><xsl:apply-templates select="tr"/></thead>
 </xsl:template>
 <xsl:template match="tbody">
-	<tbody id="tbody-1"><xsl:apply-templates select="tr"/></tbody>
+	<tbody><xsl:apply-templates select="tr"/></tbody>
 </xsl:template>
 <xsl:template match="tr">
 	<tr><xsl:apply-templates select="td"/></tr>
