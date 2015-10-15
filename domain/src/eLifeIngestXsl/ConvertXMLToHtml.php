@@ -123,6 +123,41 @@ class ConvertXMLToHtml {
   }
 
   /**
+   * @param string $method
+   * @param string|null $argument
+   * @param string $xpath_query
+   * @return string
+   */
+  public function getHtmlXpath($method, $argument = NULL, $xpath_query = '')
+  {
+    if (empty($argument)) {
+      $argument = [];
+    }
+    elseif (is_string($argument)) {
+      $argument = [$argument];
+    }
+
+    $output = call_user_func_array([$this, $method], $argument);
+
+    if (!empty($output) && !empty($xpath_query)) {
+      libxml_use_internal_errors(TRUE);
+      $dom = new DOMDocument();
+      $dom->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8"><expected>' . $output . '</expected>');
+      $xpath = new DOMXPath($dom);
+      $nodeList = $xpath->query('//expected' . $xpath_query);
+      if ($nodeList->length > 0) {
+        $output = $this->getInnerHtml($nodeList->item(0));
+      }
+      else {
+        $output = '';
+      }
+      libxml_clear_errors();
+    }
+
+    return $output;
+  }
+
+  /**
    * @param string $xpath_query
    * @return string
    */
@@ -136,7 +171,7 @@ class ConvertXMLToHtml {
     if (!empty($elements) && $elements->length > 0) {
       $new = new DOMDocument;
       $item = $elements->item(0);
-      if ($detect_xsl) {
+      if ($detect_xsl || empty($this->xsl)) {
         $xsl = NULL;
         switch ($item->nodeName) {
           case 'abstract':
@@ -162,6 +197,12 @@ class ConvertXMLToHtml {
             break;
           case 'table-wrap':
             $xsl = 'tableWrap';
+            break;
+          case 'ack':
+            $xsl = 'ack';
+            break;
+          case 'ref-list':
+            $xsl = 'reference';
             break;
         }
         if ($xsl) {

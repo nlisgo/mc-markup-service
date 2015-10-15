@@ -34,14 +34,50 @@ You can filter by a specific method in ```/tests/simpleTest.php```, for example:
 ./bin/phpunit --filter=testJatsToHtmlDecisionLetter
 ```
 
-Runnint the command above will output the expect and actual output if a difference has been found.
+Running the command above will output the expect and actual output if a difference has been found.
 
 Apply xsl templates to another JATS XML file:
 ```
-cat [JATS XML file] | ./scripts/convert_xml.php -t bib
-cat [JATS XML file] | ./scripts/convert_xml.php -t ris
-cat [JATS XML file] | ./scripts/convert_xml.php -t html
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'bib'
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'ris'
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'html'
 ```
+
+It is possible to use ```./scripts/convert_jats.php -t html``` to target specific portions of the markup.
+
+Here are a few examples:
+
+Retrieve the abstract section:
+```
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getAbstract'
+```
+other methods that can be called are: getDigest, getAuthorResponse etc.
+
+
+Retrieve a fragment doi section:
+```
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getDoi' -a '10.7554/eLife.00288.026'
+```
+
+Retrieve markup by xpath query against the source:
+```
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getSection' -a '[xpath-query]'
+```
+```
+
+Retrieve markup by xpath query against the html:
+```
+cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getHtmlXpath' -a '[method]|[argument]|[xpath-query]'
+```
+for example to retrieve the first p element of the fragment doi 10.7554/eLife.00288.042 for article 00288:
+```
+cat tests/fixtures/jats/00288-vor.xml | ./scripts/convert_jats.php -t 'html' -m 'getHtmlXpath' -a 'getDoi|10.7554/eLife.00288.042|//p[1]'
+```
+or to get the the div with class="elife-article-author-response-doi" in the author response:
+```
+cat tests/fixtures/jats/00288-vor.xml | ./scripts/convert_jats.php -t 'html' -m 'getHtmlXpath' -a 'getAuthorResponse||//div[@class="elife-article-author-response-doi"]'
+```
+
 
 To process all of the elife articles then do the following:
 ```
