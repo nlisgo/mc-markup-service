@@ -100,7 +100,7 @@ class ConvertXMLToHtml {
    */
   public function getDecisionLetter()
   {
-    $this->setXSL('desLetter');
+    $this->setXSL('sub-article');
     return $this->getSection("//sub-article[@article-type='article-commentary']");
   }
 
@@ -109,7 +109,7 @@ class ConvertXMLToHtml {
    */
   public function getAuthorResponse()
   {
-    $this->setXSL('authorResponse');
+    $this->setXSL('sub-article');
     return $this->getSection("//sub-article[@article-type='reply']");
   }
 
@@ -155,7 +155,7 @@ class ConvertXMLToHtml {
             $xsl = 'media';
             break;
           case 'sub-article':
-            $xsl = 'authorResponse';
+            $xsl = 'sub-article';
             break;
           case 'supplementary-material':
             $xsl = 'supplementary-material';
