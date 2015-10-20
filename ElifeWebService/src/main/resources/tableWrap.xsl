@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML">
-
 <xsl:template match="/">
 <html>
 	<body>
@@ -71,6 +70,32 @@
 <xsl:copy>
 	<xsl:apply-templates select="node()|@*"/>
 </xsl:copy>
+</xsl:template>
+
+<xsl:template match="mml:mtext">
+	<xsl:variable name="mtextType">
+    		<xsl:value-of select="."/>
+	</xsl:variable>
+	
+	<xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/>
+  	<xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
+	<xsl:variable name="dig" select="'0123456789'"/>
+	<xsl:variable name="alphaTrans" select="translate($mtextType, concat($upper, $lower), '')"/>
+	<xsl:variable name="digitTrans" select="translate($alphaTrans,$dig,'')"/>
+	<xsl:choose>
+		
+		<xsl:when test="string-length($alphaTrans) > 0 and string-length($digitTrans) > 0">
+			<mml:mi><xsl:value-of select="$mtextType"/></mml:mi>
+		</xsl:when>
+		<xsl:when test="string-length($alphaTrans) = 0 and not(parent::mml:mrow)">
+			<mml:mi mathvariant="normal"><xsl:value-of select="$mtextType"/></mml:mi>
+		</xsl:when>
+		<xsl:otherwise>
+			<mml:mtext><xsl:value-of select="$mtextType"/></mml:mtext>
+		</xsl:otherwise>
+		
+	</xsl:choose>
+	
 </xsl:template>
 
 <xsl:template match="@overflow|@id"/>
