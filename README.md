@@ -1,3 +1,5 @@
+The xsl templates for the citation formats have been adapted from examples provided in [jats-conversion](https://github.com/PeerJ/jats-conversion)
+
 ```
 git clone git@github.com:nlisgo/mc-markup-service.git
 cd mc-markup-service
@@ -34,8 +36,6 @@ You can filter by a specific method in ```/tests/simpleTest.php```, for example:
 ./bin/phpunit --filter=testJatsToHtmlDecisionLetter
 ```
 
-Running the command above will output the expect and actual output if a difference has been found.
-
 Apply xsl templates to another JATS XML file:
 ```
 cat [JATS XML file] | ./scripts/convert_jats.php -t 'bib'
@@ -62,7 +62,6 @@ cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getDoi' -a '10.75
 Retrieve markup by xpath query against the source:
 ```
 cat [JATS XML file] | ./scripts/convert_jats.php -t 'html' -m 'getSection' -a '[xpath-query]'
-```
 ```
 
 Retrieve markup by xpath query against the html:
