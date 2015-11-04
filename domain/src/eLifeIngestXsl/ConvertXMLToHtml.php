@@ -248,6 +248,15 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
+  public function getArticleInfoReviewingEditor() {
+    // @todo - elife - nlisgo - need articleInfoReviewingEditor.xsl
+    $this->setXSL('articleInfoReviewingEditor');
+    return $this->getSection("//sub-article//contrib-group/contrib[@contrib-type='editor']");
+  }
+
+  /**
+   * @return string
+   */
   public function getArticleInfoLicense() {
     // @todo - elife - nlisgo - need articleInfoLicense.xsl
     $this->setXSL('articleInfoLicense');
