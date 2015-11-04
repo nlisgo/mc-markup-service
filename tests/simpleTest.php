@@ -86,6 +86,30 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider jatsToHtmlTitleProvider
+     */
+    public function testJatsToHtmlTitle($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlTitleProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('title', 'getTitle');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlImpactStatementProvider
+     */
+    public function testJatsToHtmlImpactStatement($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlImpactStatementProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('impact-statement', 'getImpactStatement');
+    }
+
+    /**
      * @dataProvider jatsToHtmlAbstractProvider
      */
     public function testJatsToHtmlAbstract($expected, $actual) {
@@ -95,18 +119,6 @@ class simpleTest extends PHPUnit_Framework_TestCase
     public function jatsToHtmlAbstractProvider() {
         $this->setFolders();
         return $this->compareHtmlSection('abstract', 'getAbstract');
-    }
-
-    /**
-     * @dataProvider jatsToHtmlDigestProvider
-     */
-    public function testJatsToHtmlDigest($expected, $actual) {
-        $this->assertEqualHtml($expected, $actual);
-    }
-
-    public function jatsToHtmlDigestProvider() {
-        $this->setFolders();
-        return $this->compareHtmlSection('digest', 'getDigest');
     }
 
     /**
@@ -155,6 +167,162 @@ class simpleTest extends PHPUnit_Framework_TestCase
     public function jatsToHtmlReferencesProvider() {
         $this->setFolders();
         return $this->compareHtmlSection('references', 'getReferences');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlDatasetsProvider
+     */
+    public function testJatsToHtmlDatasets($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlDatasetsProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('datasets', 'getDatasets');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoGroupAuthorsProvider
+     */
+    public function testJatsToHtmlAuthorInfoGroupAuthors($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoGroupAuthorsProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-group-authors', 'getAuthorInfoGroupAuthors');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoContributionsProvider
+     */
+    public function testJatsToHtmlAuthorInfoContributions($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoContributionsProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-contributions', 'getAuthorInfoContributions');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoEqualContribProvider
+     */
+    public function testJatsToHtmlAuthorInfoEqualContrib($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoEqualContribProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-equal-contrib', 'getAuthorInfoEqualContrib');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoOtherFootnotesProvider
+     */
+    public function testJatsToHtmlAuthorInfoOtherFootnotes($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoOtherFootnotesProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-other-footnotes', 'getAuthorInfoOtherFootnotes');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoCorrespondenceProvider
+     */
+    public function testJatsToHtmlAuthorInfoCorrespondence($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoCorrespondenceProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-correspondence', 'getAuthorInfoCorrespondence');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoAdditionalAddressProvider
+     */
+    public function testJatsToHtmlAuthorInfoAdditionalAddress($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoAdditionalAddressProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-additional-address', 'getAuthorInfoAdditionalAddress');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoCompetingInterestProvider
+     */
+    public function testJatsToHtmlAuthorInfoCompetingInterest($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoCompetingInterestProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-competing-interest', 'getAuthorInfoCompetingInterest');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAuthorInfoFundingProvider
+     */
+    public function testJatsToHtmlAuthorInfoFunding($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAuthorInfoFundingProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('author-info-funding', 'getAuthorInfoFunding');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlArticleInfoIdentificationProvider
+     */
+    public function testJatsToHtmlArticleInfoIdentification($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlArticleInfoIdentificationProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('article-info-identification', 'getArticleInfoIdentification');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlArticleInfoHistoryProvider
+     */
+    public function testJatsToHtmlArticleInfoHistory($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlArticleInfoHistoryProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('article-info-history', 'getArticleInfoHistory');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlArticleInfoEthicsProvider
+     */
+    public function testJatsToHtmlArticleInfoEthics($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlArticleInfoEthicsProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('article-info-ethics', 'getArticleInfoEthics');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlArticleInfoLicenseProvider
+     */
+    public function testJatsToHtmlArticleInfoLicense($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlArticleInfoLicenseProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('article-info-license', 'getArticleInfoLicense');
     }
 
     /**
@@ -254,14 +422,90 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider jatsToHtmlIdSubsectionProvider
+     */
+    public function testJatsToHtmlIdSubsection($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlIdSubsectionProvider() {
+        $this->setFolders();
+        return $this->compareIdHtmlSection('subsection');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAffProvider
+     */
+    public function testJatsToHtmlAff($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAffProvider() {
+        $this->setFolders();
+        return $this->compareAffHtmlSection();
+    }
+
+    /**
+     * @dataProvider jatsToHtmlAppProvider
+     */
+    public function testJatsToHtmlApp($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlAppProvider() {
+        $this->setFolders();
+        return $this->compareAppHtmlSection();
+    }
+
+    /**
+     * @dataProvider jatsToHtmlEquProvider
+     */
+    public function testJatsToHtmlEqu($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlEquProvider() {
+        $this->setFolders();
+        return $this->compareEquHtmlSection();
+    }
+
+    /**
+     * @dataProvider jatsToHtmlDataroProvider
+     */
+    public function testJatsToHtmlDataro($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlDataroProvider() {
+        $this->setFolders();
+        return $this->compareDataroHtmlSection();
+    }
+
+    /**
+     * @dataProvider jatsToHtmlReferenceProvider
+     */
+    public function testJatsToHtmlReference($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlReferenceProvider() {
+        $this->setFolders();
+        return $this->compareReferenceHtmlSection();
+    }
+
+    /**
      * @dataProvider xpathMatchProvider
      */
-    public function testJatsToHtmlXpathMatch($file, $method, $xpath, $expected) {
+    public function testJatsToHtmlXpathMatch($file, $method, $arguments, $xpath, $expected, $type) {
         $actual_html = $this->getActualHtml($file);
-        $section = call_user_func([$actual_html, $method]);
-        $found = $this->runXpath($section, $xpath);
-        $this->assertGreaterThan(0, $found->length);
-        $this->assertEquals($expected, trim($found->item(0)->nodeValue));
+        $section = call_user_func_array([$actual_html, $method], $arguments);
+        $actual = $this->runXpath($section, $xpath, $type);
+        if ($type == 'string') {
+            $this->assertEquals($expected, $actual);
+        }
+        else {
+            $this->assertEqualHtml($expected, $actual);
+        }
     }
 
     public function xpathMatchProvider() {
@@ -274,7 +518,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $provider = [];
 
         foreach ($jsons as $json) {
-            $found = preg_match('/^(?P<filename>[0-9]{5}\-[^\-]+)\-' . $suffix . '\.json/', basename($json), $match);
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-' . $suffix . '\.json/', basename($json), $match);
             if ($found) {
                 $queries = file_get_contents($json);
                 $queries = json_decode($queries);
@@ -282,8 +526,10 @@ class simpleTest extends PHPUnit_Framework_TestCase
                     $provider[] = [
                         $match['filename'],
                         $query->method,
+                        (!empty($query->arguments)) ? $query->arguments : [],
                         $query->xpath,
-                        $query->string,
+                        (isset($query->string)) ? $query->string : $query->html,
+                        (isset($query->string)) ? 'string' : 'html',
                     ];
                 }
             }
@@ -292,12 +538,182 @@ class simpleTest extends PHPUnit_Framework_TestCase
         return $provider;
     }
 
-    protected function runXpath($html, $xpath_query) {
+    protected function runXpath($html, $xpath_query, $type = 'string') {
         $domDoc = new DOMDocument();
         $domDoc->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8"><actual>' . $html . '</actual>');
         $xpath = new DOMXPath($domDoc);
         $nodeList = $xpath->query($xpath_query);
-        return $nodeList;
+        $this->assertGreaterThanOrEqual(1, $nodeList->length);
+        if ($type == 'string') {
+            $output = $nodeList->item(0)->nodeValue;
+        }
+        else {
+            $output = $domDoc->saveHTML($nodeList->item(0));
+        }
+
+        return trim($output);
+    }
+
+    /**
+     * Prepare array of actual and expected results for affiliation HTML.
+     */
+    protected function compareAffHtmlSection() {
+        $suffix = '-aff';
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<aff_id>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['aff_id'] . $suffix,
+                    'aff_id' => $match['aff_id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getAffiliation', $section['aff_id'], '', $section['prefix']));
+        }
+
+        return $compares;
+    }
+
+    /**
+     * Prepare array of actual and expected results for appendix HTML.
+     */
+    protected function compareAppHtmlSection() {
+        $suffix = '-app';
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<app_id>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['app_id'] . $suffix,
+                    'app_id' => $match['app_id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getAppendix', $section['app_id'], '', $section['prefix']));
+        }
+
+        return $compares;
+    }
+
+    /**
+     * Prepare array of actual and expected results for equation HTML.
+     */
+    protected function compareEquHtmlSection() {
+        $suffix = '-equ';
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<equ_id>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['equ_id'] . $suffix,
+                    'equ_id' => $match['equ_id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getEquation', $section['equ_id'], '', $section['prefix']));
+        }
+
+        return $compares;
+    }
+
+    /**
+     * Prepare array of actual and expected results for related object HTML.
+     */
+    protected function compareDataroHtmlSection() {
+        $suffix = '-dataro';
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<dataro_id>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['dataro_id'] . $suffix,
+                    'dataro_id' => $match['dataro_id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDataset', $section['dataro_id'], '', $section['prefix']));
+        }
+
+        return $compares;
+    }
+
+    /**
+     * Prepare array of actual and expected results for reference HTML.
+     */
+    protected function compareReferenceHtmlSection() {
+        $suffix = '-bib';
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<bib_id>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['bib_id'] . $suffix,
+                    'bib_id' => $match['bib_id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getReference', $section['bib_id'], '', $section['prefix']));
+        }
+
+        return $compares;
+    }
+
+    /**
+     * Prepare array of actual and expected results for HTML targeted by id.
+     */
+    protected function compareIdHtmlSection($type_suffix) {
+        $suffix = '-id-' . $type_suffix;
+        $htmls = glob($this->html_folder . '*' . $suffix . '.html');
+        $sections = [];
+
+        foreach ($htmls as $html) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<id>.+)' . $suffix . '\.html$/', basename($html), $match);
+            if ($found) {
+                $sections[] = [
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['id'] . $suffix,
+                    'id' => $match['id'],
+                ];
+            }
+        }
+        $compares = [];
+
+        foreach ($sections as $section) {
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getId', $section['id'], '', $section['prefix']));
+        }
+
+        return $compares;
     }
 
     /**
@@ -309,18 +725,19 @@ class simpleTest extends PHPUnit_Framework_TestCase
         $sections = [];
 
         foreach ($htmls as $html) {
-            $found = preg_match('/^(?P<filename>[0-9]{5}\-[^\-]+)\-(?P<doi>[^\-]+)' . $suffix . '\.html$/', basename($html), $matches);
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-(?P<doi>[^\-]+)' . $suffix . '\.html$/', basename($html), $match);
             if ($found) {
                 $sections[] = [
-                    'suffix' => '-' . $matches['doi'] . $suffix,
-                    'doi' => '10.7554/' . $matches['doi'],
+                    'prefix' => $match['filename'],
+                    'suffix' => '-' . $match['doi'] . $suffix,
+                    'doi' => '10.7554/' . $match['doi'],
                 ];
             }
         }
         $compares = [];
 
         foreach ($sections as $section) {
-            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', $section['doi'], ''));
+            $compares = array_merge($compares, $this->compareHtmlSection($section['suffix'], 'getDoi', $section['doi'], '', $section['prefix']));
         }
 
         return $compares;
@@ -329,14 +746,14 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * Prepare array of actual and expected results.
      */
-    protected function compareHtmlSection($type, $method, $params = [], $suffix = '-section-') {
+    protected function compareHtmlSection($type, $method, $params = [], $suffix = '-section-', $prefix = '*') {
         $section_suffix = $suffix . $type;
         if (is_string($params)) {
             $params = [$params];
         }
         $html_prefix = '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
         $expected = 'expected';
-        $htmls = glob($this->html_folder . "*" . $section_suffix . ".html");
+        $htmls = glob($this->html_folder . $prefix . $section_suffix . ".html");
         $compares = [];
 
         libxml_use_internal_errors(TRUE);
@@ -365,13 +782,26 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * Compare two HTML fragments.
      */
-    protected function assertEqualHtml($expected, $actual)
-    {
-        $from = ['/>\s+/', '/[\s]+</', '/\s+/', '/>\s+</'];
-        $to = ['>', '<', ' ', '><'];
+    protected function assertEqualHtml($expected, $actual) {
+        $from = [
+            '/\>[^\S ]+/s',
+            '/[^\S ]+\</s',
+            '/(\s)+/s',
+            '/> </s',
+            '/>\s+\[/s',
+            '/\]\s+</s',
+        ];
+        $to = [
+            '>',
+            '<',
+            '\\1',
+            '><',
+            '>[',
+            ']<',
+        ];
         $this->assertEquals(
-            preg_replace($from, $to, $expected),
-            preg_replace($from, $to, $actual)
+            ConvertXMLToHtml::tidyHtml(preg_replace($from, $to, $expected)),
+            ConvertXMLToHtml::tidyHtml(preg_replace($from, $to, $actual))
         );
     }
 

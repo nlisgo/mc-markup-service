@@ -10,6 +10,7 @@ use eLifeIngestXsl\ConvertXML\XSLString;
 use XSLTProcessor;
 
 class ConvertXMLToHtml {
+
   /**
    * @var string
    */
@@ -48,7 +49,9 @@ class ConvertXMLToHtml {
 
   private function setXSL($xsl) {
     $this->setFile($xsl);
-    $this->xsl = XSLString::fromString(file_get_contents($this->getFile()))->getValue();
+    if (file_exists($this->getFile())) {
+      $this->xsl = XSLString::fromString(file_get_contents($this->getFile()))->getValue();
+    }
   }
 
   public function getOutput() {
@@ -73,6 +76,22 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
+  public function getTitle() {
+    $this->setXSL('formatOnly');
+    return $this->getSection("//title-group/article-title");
+  }
+
+  /**
+   * @return string
+   */
+  public function getImpactStatement() {
+    $this->setXSL('formatOnly');
+    return $this->getSection("//custom-meta-group//meta-name[contains(text(), 'Author impact statement')]/following-sibling::meta-value");
+  }
+
+  /**
+   * @return string
+   */
   public function getAbstract() {
     $this->setXSL('abstract');
     return $this->getSection("//abstract[not(@abstract-type)]");
@@ -89,8 +108,7 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
-  public function getAcknowledgements()
-  {
+  public function getAcknowledgements() {
     $this->setXSL('ack');
     return $this->getSection("//ack");
   }
@@ -98,8 +116,7 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
-  public function getDecisionLetter()
-  {
+  public function getDecisionLetter() {
     $this->setXSL('sub-article');
     return $this->getSection("//sub-article[@article-type='article-commentary']");
   }
@@ -107,8 +124,7 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
-  public function getAuthorResponse()
-  {
+  public function getAuthorResponse() {
     $this->setXSL('sub-article');
     return $this->getSection("//sub-article[@article-type='reply']");
   }
@@ -116,45 +132,126 @@ class ConvertXMLToHtml {
   /**
    * @return string
    */
-  public function getReferences()
-  {
+  public function getReferences() {
     $this->setXSL('reference');
     return $this->getSection("//ref-list");
   }
 
   /**
-   * @param string $method
-   * @param string|null $argument
-   * @param string $xpath_query
    * @return string
    */
-  public function getHtmlXpath($method, $argument = NULL, $xpath_query = '')
-  {
-    if (empty($argument)) {
-      $argument = [];
-    }
-    elseif (is_string($argument)) {
-      $argument = [$argument];
-    }
+  public function getDatasets() {
+    // @todo - elife - nlisgo - need dataset.xsl
+    $this->setXSL('dataset');
+    return $this->getSection("//sec[@sec-type='supplementary-material']/sec[@sec-type='datasets']");
+  }
 
-    $output = call_user_func_array([$this, $method], $argument);
+  /**
+   * @return string
+   */
+  public function getAuthorInfoGroupAuthors() {
+    // @todo - elife - nlisgo - need authorInfoGroupAuthor.xsl
+    $this->setXSL('authorInfoGroupAuthor');
+    return $this->getSection('//article-meta');
+  }
 
-    if (!empty($output) && !empty($xpath_query)) {
-      libxml_use_internal_errors(TRUE);
-      $dom = new DOMDocument();
-      $dom->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8"><expected>' . $output . '</expected>');
-      $xpath = new DOMXPath($dom);
-      $nodeList = $xpath->query('//expected' . $xpath_query);
-      if ($nodeList->length > 0) {
-        $output = $this->getInnerHtml($nodeList->item(0));
-      }
-      else {
-        $output = '';
-      }
-      libxml_clear_errors();
-    }
+  /**
+   * @return string
+   */
+  public function getAuthorInfoContributions() {
+    // @todo - elife - nlisgo - need authorInfoContribution.xsl
+    $this->setXSL('authorInfoContribution');
+    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='author-contribution']");
+  }
 
-    return $output;
+  /**
+   * @return string
+   */
+  public function getAuthorInfoEqualContrib() {
+    // @todo - elife - nlisgo - need authorInfoEqualContrib.xsl
+    $this->setXSL('authorInfoEqualContrib');
+    return $this->getSection("//author-notes");
+  }
+
+  /**
+   * @return string
+   */
+  public function getAuthorInfoOtherFootnotes() {
+    // @todo - elife - nlisgo - need authorInfoOtherFootnote.xsl
+    $this->setXSL('authorInfoOtherFootnote');
+    return $this->getSection("//author-notes");
+  }
+
+  /**
+   * @return string
+   */
+  public function getAuthorInfoCorrespondence() {
+    // @todo - elife - nlisgo - need authorInfoCorrespondence.xsl
+    $this->setXSL('authorInfoCorrespondence');
+    return $this->getSection("//author-notes");
+  }
+
+  /**
+   * @return string
+   */
+  public function getAuthorInfoAdditionalAddress() {
+    // @todo - elife - nlisgo - need authorInfoAdditionalAddress.xsl
+    $this->setXSL('authorInfoAdditionalAddress');
+    return $this->getSection("//author-notes");
+  }
+
+  /**
+   * @return string
+   */
+  public function getAuthorInfoCompetingInterest() {
+    // @todo - elife - nlisgo - need authorInfoCompetingInterest.xsl
+    $this->setXSL('authorInfoCompetingInterest');
+    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='author-contribution']");
+  }
+
+  /**
+   * @return string
+   */
+  public function getAuthorInfoFunding() {
+    // @todo - elife - nlisgo - need authorInfoFunding.xsl
+    $this->setXSL('authorInfoFunding');
+    return $this->getSection("//funding-group");
+  }
+
+  /**
+   * @return string
+   */
+  public function getArticleInfoIdentification() {
+    // @todo - elife - nlisgo - need articleInfoIdentification.xsl
+    $this->setXSL('articleInfoIdentification');
+    return $this->getSection("//article-meta");
+  }
+
+  /**
+   * @return string
+   */
+  public function getArticleInfoHistory() {
+    // @todo - elife - nlisgo - need articleInfoHistory.xsl
+    $this->setXSL('articleInfoHistory');
+    return $this->getSection("//article-meta");
+  }
+
+  /**
+   * @return string
+   */
+  public function getArticleInfoEthics() {
+    // @todo - elife - nlisgo - need articleInfoEthics.xsl
+    $this->setXSL('articleInfoEthics');
+    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='ethics-information']");
+  }
+
+  /**
+   * @return string
+   */
+  public function getArticleInfoLicense() {
+    // @todo - elife - nlisgo - need articleInfoLicense.xsl
+    $this->setXSL('articleInfoLicense');
+    return $this->getSection("//article-meta/permissions");
   }
 
   /**
@@ -209,6 +306,9 @@ class ConvertXMLToHtml {
           $this->setXSL($xsl);
         }
       }
+      if (!$this->getXSL()) {
+        return '';
+      }
       $new->appendChild($new->importNode($item, TRUE));
 
       $xsl = new DOMDocument;
@@ -223,19 +323,148 @@ class ConvertXMLToHtml {
       $output = $proc->transformToXML($new);
       $actual->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $output);
       libxml_clear_errors();
-      return $this->getInnerHtml($actual->getElementsByTagName('body')->item(0));
+      return $this->tidyHtml($this->getInnerHtml($actual->getElementsByTagName('body')->item(0)));
     }
   }
 
   /**
+   * @param string $html
+   * @return string mixed
+   */
+  public static function tidyHtml($html) {
+    // Fix self-closing tags issue.
+    $self_closing = [
+      'area',
+      'base',
+      'br',
+      'col',
+      'command',
+      'embed',
+      'hr',
+      'img',
+      'input',
+      'keygen',
+      'link',
+      'meta',
+      'param',
+      'source',
+      'track',
+      'wbr',
+    ];
+
+    $from = [
+      '/<(?!' . implode('|', $self_closing) . ')([a-z]+)\/>/',
+      '/<(?!' . implode('|', $self_closing) . ')([a-z]+)( [^\/>]+)\/>/',
+    ];
+    $to = [
+      '<$1></$1>',
+      '<$1$2></$1>',
+    ];
+    return preg_replace($from, $to, $html);
+  }
+
+  /**
+   * @param string $method
+   * @param string|null $argument
+   * @param string $xpath_query
+   * @return string
+   */
+  public function getHtmlXpath($method, $argument = NULL, $xpath_query = '')
+  {
+    if (empty($argument)) {
+      $argument = [];
+    }
+    elseif (is_string($argument)) {
+      $argument = [$argument];
+    }
+
+    $output = call_user_func_array([$this, $method], $argument);
+
+    if (!empty($output) && !empty($xpath_query)) {
+      libxml_use_internal_errors(TRUE);
+      $dom = new DOMDocument();
+      $dom->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8"><expected>' . $output . '</expected>');
+      $xpath = new DOMXPath($dom);
+      $nodeList = $xpath->query('//expected' . $xpath_query);
+      if ($nodeList->length > 0) {
+        $output = $this->getInnerHtml($nodeList->item(0));
+      }
+      else {
+        $output = '';
+      }
+      libxml_clear_errors();
+    }
+
+    return $output;
+  }
+
+  /**
    * @param string $doi
-   * @param string $fragment_type
    * @return string
    */
   public function getDoi($doi) {
     $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group | //article-id[@pub-id-type='doi' and text()='%s']/ancestor::sub-article";
     $xpath_query = sprintf($xpath_string, $doi, $doi, $doi);
     return $this->getSection($xpath_query, TRUE);
+  }
+
+  /**
+   * @param string $id
+   * @param string $within
+   * @return string
+   */
+  public function getId($id, $within = "//*[@id='main-text']") {
+    return $this->getSection($within . "//*[@id='" . $id . "']");
+  }
+
+  /**
+   * @param string $aff_id
+   * @return string
+   */
+  public function getAffiliation($aff_id) {
+    // @todo - elife - nlisgo - need affiliation.xsl
+    $this->setXSL('affiliation');
+    return $this->getSection("//aff[@id='" . $aff_id . "']");
+  }
+
+  /**
+   * @param string $bib_id
+   * @return string
+   */
+  public function getReference($bib_id) {
+    // @todo - elife - nlisgo - need referenceSingle.xsl
+    $this->setXSL('referenceSingle');
+    return $this->getSection("//ref-list/ref[@id='" . $bib_id . "']");
+  }
+
+  /**
+   * @param string $app_id
+   * @return string
+   */
+  public function getAppendix($app_id) {
+    // @todo - elife - nlisgo - need appendix.xsl
+    $this->setXSL('appendix');
+    return $this->getSection("//app-group/app[@id='" . $app_id . "']");
+  }
+
+  /**
+   * @param string $equ_id
+   * @return string
+   */
+  public function getEquation($equ_id) {
+    // @todo - elife - nlisgo - need equation.xsl
+    $this->setXSL('equation');
+    return $this->getSection("//display-formula[@id='" . $equ_id . "']");
+  }
+
+  /**
+   * @param string $dataset_id
+   * @return string
+   */
+  public function getDataset($dataset_id) {
+    // @todo - elife - nlisgo - need dataset.xsl
+    $this->setXSL('datasetSingle');
+    return $this->getSection("//related-object[@id='" . $dataset_id . "']");
   }
 
   /**
