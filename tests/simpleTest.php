@@ -424,14 +424,14 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlIdSubsectionProvider
      */
-    public function testJatsToHtmlIdSubsection($expected, $actual) {
+    /*public function testJatsToHtmlIdSubsection($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
     public function jatsToHtmlIdSubsectionProvider() {
         $this->setFolders();
         return $this->compareIdHtmlSection('subsection');
-    }
+    }*/
 
     /**
      * @dataProvider jatsToHtmlAffProvider
@@ -460,14 +460,14 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlEquProvider
      */
-    public function testJatsToHtmlEqu($expected, $actual) {
+    /*public function testJatsToHtmlEqu($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
     public function jatsToHtmlEquProvider() {
         $this->setFolders();
         return $this->compareEquHtmlSection();
-    }
+    }*/
 
     /**
      * @dataProvider jatsToHtmlDataroProvider
