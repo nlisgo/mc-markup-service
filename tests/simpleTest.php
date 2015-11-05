@@ -196,7 +196,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlDatasetsProvider
      */
-    public function testJatsToHtmlDatasets($expected, $actual) {
+    public function testJatsToHtmlDatasetsX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -208,7 +208,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoGroupAuthorsProvider
      */
-    public function testJatsToHtmlAuthorInfoGroupAuthors($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoGroupAuthorsX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -220,7 +220,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoContributionsProvider
      */
-    public function testJatsToHtmlAuthorInfoContributions($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoContributionsX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -232,7 +232,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoEqualContribProvider
      */
-    public function testJatsToHtmlAuthorInfoEqualContrib($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoEqualContribX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -244,7 +244,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoOtherFootnotesProvider
      */
-    public function testJatsToHtmlAuthorInfoOtherFootnotes($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoOtherFootnotesX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -256,7 +256,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoCorrespondenceProvider
      */
-    public function testJatsToHtmlAuthorInfoCorrespondence($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoCorrespondenceX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -268,7 +268,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoAdditionalAddressProvider
      */
-    public function testJatsToHtmlAuthorInfoAdditionalAddress($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoAdditionalAddressX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -280,7 +280,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoCompetingInterestProvider
      */
-    public function testJatsToHtmlAuthorInfoCompetingInterest($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoCompetingInterestX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -292,7 +292,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAuthorInfoFundingProvider
      */
-    public function testJatsToHtmlAuthorInfoFunding($expected, $actual) {
+    public function testJatsToHtmlAuthorInfoFundingX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -304,7 +304,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlArticleInfoIdentificationProvider
      */
-    public function testJatsToHtmlArticleInfoIdentification($expected, $actual) {
+    public function testJatsToHtmlArticleInfoIdentificationX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -316,7 +316,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlArticleInfoHistoryProvider
      */
-    public function testJatsToHtmlArticleInfoHistory($expected, $actual) {
+    public function testJatsToHtmlArticleInfoHistoryX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -328,7 +328,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlArticleInfoEthicsProvider
      */
-    public function testJatsToHtmlArticleInfoEthics($expected, $actual) {
+    public function testJatsToHtmlArticleInfoEthicsX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -340,7 +340,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlArticleInfoReviewingEditorProvider
      */
-    public function testJatsToHtmlArticleInfoReviewingEditor($expected, $actual) {
+    public function testJatsToHtmlArticleInfoReviewingEditorX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -352,7 +352,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlArticleInfoLicenseProvider
      */
-    public function testJatsToHtmlArticleInfoLicense($expected, $actual) {
+    public function testJatsToHtmlArticleInfoLicenseX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -460,19 +460,19 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlIdSubsectionProvider
      */
-    /*public function testJatsToHtmlIdSubsection($expected, $actual) {
+    public function testJatsToHtmlIdSubsectionX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
     public function jatsToHtmlIdSubsectionProvider() {
         $this->setFolders();
         return $this->compareIdHtmlSection('subsection');
-    }*/
+    }
 
     /**
      * @dataProvider jatsToHtmlAffProvider
      */
-    public function testJatsToHtmlAff($expected, $actual) {
+    public function testJatsToHtmlAffX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -484,7 +484,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlAppProvider
      */
-    public function testJatsToHtmlApp($expected, $actual) {
+    public function testJatsToHtmlAppX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -496,19 +496,19 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlEquProvider
      */
-    /*public function testJatsToHtmlEqu($expected, $actual) {
+    public function testJatsToHtmlEquX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
     public function jatsToHtmlEquProvider() {
         $this->setFolders();
         return $this->compareEquHtmlSection();
-    }*/
+    }
 
     /**
      * @dataProvider jatsToHtmlDataroProvider
      */
-    public function testJatsToHtmlDataro($expected, $actual) {
+    public function testJatsToHtmlDataroX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
@@ -520,7 +520,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider jatsToHtmlReferenceProvider
      */
-    public function testJatsToHtmlReference($expected, $actual) {
+    public function testJatsToHtmlReferenceX($expected, $actual) {
         $this->assertEqualHtml($expected, $actual);
     }
 
