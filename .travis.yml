@@ -24,4 +24,4 @@ install:
   - travis_retry composer install --prefer-dist --no-interaction
 
 script:
-  - ./bin/phpunit --testdox
+  - ./bin/phpunit --testdox --group 'phase1'
