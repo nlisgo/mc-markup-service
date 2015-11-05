@@ -178,7 +178,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoContributions() {
     // @todo - elife - nlisgo - need authorInfoContribution.xsl
     $this->setXSL('authorInfoContribution');
-    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='author-contribution']");
+    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='author-contribution']/fn[@fn-type='con']");
   }
 
   /**
@@ -187,7 +187,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoEqualContrib() {
     // @todo - elife - nlisgo - need authorInfoEqualContrib.xsl
     $this->setXSL('authorInfoEqualContrib');
-    return $this->getSection("//author-notes");
+    return $this->getSection("//author-notes/fn[@fn-type='con']");
   }
 
   /**
@@ -196,7 +196,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoOtherFootnotes() {
     // @todo - elife - nlisgo - need authorInfoOtherFootnote.xsl
     $this->setXSL('authorInfoOtherFootnote');
-    return $this->getSection("//author-notes");
+    return $this->getSection("//author-notes/fn[@fn-type='other'][starts-with(@id, 'fn')]");
   }
 
   /**
@@ -205,7 +205,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoCorrespondence() {
     // @todo - elife - nlisgo - need authorInfoCorrespondence.xsl
     $this->setXSL('authorInfoCorrespondence');
-    return $this->getSection("//author-notes");
+    return $this->getSection("//article");
   }
 
   /**
@@ -214,7 +214,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoAdditionalAddress() {
     // @todo - elife - nlisgo - need authorInfoAdditionalAddress.xsl
     $this->setXSL('authorInfoAdditionalAddress');
-    return $this->getSection("//author-notes");
+    return $this->getSection("//author-notes/fn[@fn-type='present-address']");
   }
 
   /**
@@ -223,7 +223,7 @@ class ConvertXMLToHtml {
   public function getAuthorInfoCompetingInterest() {
     // @todo - elife - nlisgo - need authorInfoCompetingInterest.xsl
     $this->setXSL('authorInfoCompetingInterest');
-    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='author-contribution']");
+    return $this->getSection("//sec[@sec-type='additional-information']/fn-group[@content-type='competing-interest']/fn[@fn-type='conflict']");
   }
 
   /**
@@ -450,7 +450,7 @@ class ConvertXMLToHtml {
    * @param string $within
    * @return string
    */
-  public function getId($id, $within = "//*[@id='main-text']") {
+  public function getId($id, $within = "//body") {
     return $this->getSection($within . "//*[@id='" . $id . "']");
   }
 
