@@ -122,6 +122,30 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider jatsToHtmlMainTextProvider
+     */
+    public function testJatsToHtmlMainTextX($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlMainTextProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('main-text', 'getMainText');
+    }
+
+    /**
+     * @dataProvider jatsToHtmlDigestProvider
+     */
+    public function testJatsToHtmlDigest($expected, $actual) {
+        $this->assertEqualHtml($expected, $actual);
+    }
+
+    public function jatsToHtmlDigestProvider() {
+        $this->setFolders();
+        return $this->compareHtmlSection('digest', 'getDigest');
+    }
+
+    /**
      * @dataProvider jatsToHtmlDecisionLetterProvider
      */
     public function testJatsToHtmlDecisionLetter($expected, $actual) {
