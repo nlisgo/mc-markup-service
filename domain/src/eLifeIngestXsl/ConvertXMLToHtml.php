@@ -10,7 +10,7 @@ use eLifeIngestXsl\ConvertXML\XSLString;
 use XSLTProcessor;
 
 class ConvertXMLToHtml {
-
+  const XSL_NOT_FOUND = 'XSL not found';
   /**
    * @var string
    */
@@ -36,6 +36,12 @@ class ConvertXMLToHtml {
   }
 
   public function getXSL() {
+    if (empty($this->xsl)) {
+      return FALSE;
+    }
+    elseif ($this->xsl == self::XSL_NOT_FOUND) {
+      return $this->xsl;
+    }
     return XSLString::fromString($this->xsl);
   }
 
@@ -51,6 +57,9 @@ class ConvertXMLToHtml {
     $this->setFile($xsl);
     if (file_exists($this->getFile())) {
       $this->xsl = XSLString::fromString(file_get_contents($this->getFile()))->getValue();
+    }
+    else {
+      $this->xsl = self::XSL_NOT_FOUND;
     }
   }
 
@@ -95,6 +104,14 @@ class ConvertXMLToHtml {
   public function getAbstract() {
     $this->setXSL('abstract');
     return $this->getSection("//abstract[not(@abstract-type)]");
+  }
+
+  /**
+   * @return string
+   */
+  public function getMainText() {
+    $this->setXSL('mainText');
+    return $this->getSection("//body");
   }
 
   /**
@@ -265,20 +282,28 @@ class ConvertXMLToHtml {
 
   /**
    * @param string $xpath_query
+   * @param int $limit
    * @return string
    */
-  public function getSection($xpath_query, $detect_xsl = FALSE) {
+  public function getSection($xpath_query, $limit = 0) {
+    if ($this->getXSL() == self::XSL_NOT_FOUND) {
+      return self::XSL_NOT_FOUND . ' (' . $this->file . ')';
+    }
     libxml_use_internal_errors(TRUE);
     $actual = new DOMDocument;
     $actual->loadXML($this->getXML());
     $xpath = new DOMXPath($actual);
     $elements = $xpath->query($xpath_query);
 
+    $output = [];
     if (!empty($elements) && $elements->length > 0) {
-      $output = [];
-      foreach ($elements as $element) {
+      $break = ($limit > 0) ? $limit : $elements->length;
+      foreach ($elements as $i => $element) {
+        if ($i >= $break) {
+          break;
+        }
         $new = new DOMDocument;
-        if ($detect_xsl || empty($this->xsl)) {
+        if (!$this->getXSL()) {
           $xsl = NULL;
           switch ($element->nodeName) {
             case 'abstract':
@@ -335,8 +360,8 @@ class ConvertXMLToHtml {
         libxml_clear_errors();
         $output[] = $this->getInnerHtml($actual->getElementsByTagName('body')->item(0));
       }
-      return $this->tidyHtml(implode("\n", $output));
     }
+    return $this->tidyHtml(implode("\n", $output));
   }
 
   /**
@@ -417,7 +442,7 @@ class ConvertXMLToHtml {
   public function getDoi($doi) {
     $xpath_string = "//object-id[@pub-id-type='doi' and text()='%s'][not(parent::fig[not(@specific-use) and ancestor::fig-group])]/parent::* | //object-id[@pub-id-type='doi' and text()='%s'][parent::fig[not(@specific-use) and ancestor::fig-group]]/ancestor::fig-group | //article-id[@pub-id-type='doi' and text()='%s']/ancestor::sub-article";
     $xpath_query = sprintf($xpath_string, $doi, $doi, $doi);
-    return $this->getSection($xpath_query, TRUE);
+    return $this->getSection($xpath_query);
   }
 
   /**
