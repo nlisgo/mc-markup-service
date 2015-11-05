@@ -78,7 +78,7 @@ class ConvertXMLToHtml {
    */
   public function getTitle() {
     $this->setXSL('formatOnly');
-    return $this->getSection("//title-group/article-title");
+    return $this->getSection("//article-meta//title-group/article-title");
   }
 
   /**
@@ -275,64 +275,68 @@ class ConvertXMLToHtml {
     $elements = $xpath->query($xpath_query);
 
     if (!empty($elements) && $elements->length > 0) {
-      $new = new DOMDocument;
-      $item = $elements->item(0);
-      if ($detect_xsl || empty($this->xsl)) {
-        $xsl = NULL;
-        switch ($item->nodeName) {
-          case 'abstract':
-            $xsl = 'abstract';
-            break;
-          case 'boxed-text':
-            $xsl = 'boxedText';
-            break;
-          case 'fig':
-            $xsl = 'fig';
-            break;
-          case 'fig-group':
-            $xsl = 'fig-group';
-            break;
-          case 'media':
-            $xsl = 'media';
-            break;
-          case 'sub-article':
-            $xsl = 'sub-article';
-            break;
-          case 'supplementary-material':
-            $xsl = 'supplementary-material';
-            break;
-          case 'table-wrap':
-            $xsl = 'tableWrap';
-            break;
-          case 'ack':
-            $xsl = 'ack';
-            break;
-          case 'ref-list':
-            $xsl = 'reference';
-            break;
+      $output = [];
+      for ($i = 0; $i < $elements->length; $i++) {
+        $new = new DOMDocument;
+        $item = $elements->item($i);
+        if ($detect_xsl || empty($this->xsl)) {
+          $xsl = NULL;
+          switch ($item->nodeName) {
+            case 'abstract':
+              $xsl = 'abstract';
+              break;
+            case 'boxed-text':
+              $xsl = 'boxedText';
+              break;
+            case 'fig':
+              $xsl = 'fig';
+              break;
+            case 'fig-group':
+              $xsl = 'fig-group';
+              break;
+            case 'media':
+              $xsl = 'media';
+              break;
+            case 'sub-article':
+              $xsl = 'sub-article';
+              break;
+            case 'supplementary-material':
+              $xsl = 'supplementary-material';
+              break;
+            case 'table-wrap':
+              $xsl = 'tableWrap';
+              break;
+            case 'ack':
+              $xsl = 'ack';
+              break;
+            case 'ref-list':
+              $xsl = 'reference';
+              break;
+          }
+          if ($xsl) {
+            $this->setXSL($xsl);
+          }
         }
-        if ($xsl) {
-          $this->setXSL($xsl);
+        if (!$this->getXSL()) {
+          return '';
         }
+        $new->appendChild($new->importNode($item, TRUE));
+
+        $xsl = new DOMDocument;
+        $xsl->loadXML($this->getXSL());
+        $xsl->documentURI = $this->getFile();
+
+        // Configure the transformer.
+        $proc = new XSLTProcessor;
+        // Attach the xsl rules.
+        $proc->importStylesheet($xsl);
+
+        $output_xml = $proc->transformToXML($new);
+        $actual->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $output_xml);
+        libxml_clear_errors();
+        $output[] = $this->getInnerHtml($actual->getElementsByTagName('body')->item(0));
       }
-      if (!$this->getXSL()) {
-        return '';
-      }
-      $new->appendChild($new->importNode($item, TRUE));
-
-      $xsl = new DOMDocument;
-      $xsl->loadXML($this->getXSL());
-      $xsl->documentURI = $this->getFile();
-
-      // Configure the transformer.
-      $proc = new XSLTProcessor;
-      // Attach the xsl rules.
-      $proc->importStylesheet($xsl);
-
-      $output = $proc->transformToXML($new);
-      $actual->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $output);
-      libxml_clear_errors();
-      return $this->tidyHtml($this->getInnerHtml($actual->getElementsByTagName('body')->item(0)));
+      return $this->tidyHtml(implode("\n", $output));
     }
   }
 
