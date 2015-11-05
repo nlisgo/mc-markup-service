@@ -276,12 +276,11 @@ class ConvertXMLToHtml {
 
     if (!empty($elements) && $elements->length > 0) {
       $output = [];
-      for ($i = 0; $i < $elements->length; $i++) {
+      foreach ($elements as $element) {
         $new = new DOMDocument;
-        $item = $elements->item($i);
         if ($detect_xsl || empty($this->xsl)) {
           $xsl = NULL;
-          switch ($item->nodeName) {
+          switch ($element->nodeName) {
             case 'abstract':
               $xsl = 'abstract';
               break;
@@ -320,7 +319,7 @@ class ConvertXMLToHtml {
         if (!$this->getXSL()) {
           return '';
         }
-        $new->appendChild($new->importNode($item, TRUE));
+        $new->appendChild($new->importNode($element, TRUE));
 
         $xsl = new DOMDocument;
         $xsl->loadXML($this->getXSL());
