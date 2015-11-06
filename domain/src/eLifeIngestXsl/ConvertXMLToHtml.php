@@ -465,6 +465,16 @@ class ConvertXMLToHtml {
   }
 
   /**
+   * @param int $author_pos
+   * @return string
+   */
+  public function getAuthorAffiliation($author_pos) {
+    // @todo - elife - nlisgo - need authorAffiliation.xsl
+    $this->setXSL('authorAffiliation');
+    return $this->getSection("//article-meta//contrib-group/contrib[@contrib-type='author'][" . $author_pos . "]//aff[not(@id)] | //aff[@id=//article-meta//contrib-group/contrib[@contrib-type='author'][" . $author_pos . "]/xref[@ref-type='aff']/@rid]");
+  }
+
+  /**
    * @param string $bib_id
    * @return string
    */
