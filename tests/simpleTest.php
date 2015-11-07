@@ -3,6 +3,7 @@
 use eLifeIngestXsl\ConvertXML\XMLString;
 use eLifeIngestXsl\ConvertXMLToBibtex;
 use eLifeIngestXsl\ConvertXMLToCitationFormat;
+use eLifeIngestXsl\ConvertXMLToEif;
 use eLifeIngestXsl\ConvertXMLToHtml;
 use eLifeIngestXsl\ConvertXMLToRis;
 
@@ -11,8 +12,8 @@ class simpleTest extends PHPUnit_Framework_TestCase
     private $jats_folder = '';
     private $bib_folder = '';
     private $ris_folder = '';
+    private $eif_folder = '';
     private $html_folder = '';
-    private $xpath_folder = '';
 
     public function setUp()
     {
@@ -25,8 +26,8 @@ class simpleTest extends PHPUnit_Framework_TestCase
             $this->jats_folder = $realpath . '/fixtures/jats/';
             $this->bib_folder = $realpath . '/fixtures/bib/';
             $this->ris_folder = $realpath . '/fixtures/ris/';
+            $this->eif_folder = $realpath . '/fixtures/eif/';
             $this->html_folder = $realpath . '/fixtures/html/';
-            $this->xpath_folder = $realpath . '/fixtures/xpath/';
         }
     }
 
@@ -83,6 +84,79 @@ class simpleTest extends PHPUnit_Framework_TestCase
         else {
             return new ConvertXMLToBibtex($xml_string);
         }
+    }
+
+    /**
+     * @dataProvider jatsToEifProvider
+     */
+    public function testJatsToEif($expected, $actual) {
+        $this->assertEifJsonEquals($expected, $actual);
+    }
+
+    public function jatsToEifProvider() {
+        $ext = 'json';
+        $compares = [];
+        $this->setFolders();
+        $folder = $this->eif_folder;
+        $eifs = glob($folder . '*.' . $ext);
+
+        foreach ($eifs as $eif) {
+            $file = basename($eif, '.' . $ext);
+            $convert = $this->convertEifFormat($file);
+            $compares[] = [
+                json_decode(file_get_contents($eif)),
+                json_decode($convert->getOutput()),
+            ];
+        }
+
+        return $compares;
+    }
+
+    /**
+     * @param string $file
+     * @return ConvertXMLToEif
+     */
+    protected function convertEifFormat($file) {
+        return new ConvertXMLToEif(XMLString::fromString(file_get_contents($this->jats_folder . $file . '.xml')));
+    }
+
+    /**
+     * @dataProvider eifPartialMatchProvider
+     */
+    public function testJatsToEifPartialMatch($expected, $actual, $message = '') {
+        $expected = get_object_vars($expected);
+        $actual = get_object_vars($actual);
+        $this->assertGreaterThanOrEqual(count($expected), count($actual));
+        foreach ($expected as $key => $needle) {
+            $this->assertArrayHasKey($key, $actual);
+            $this->assertEifJsonEquals($expected[$key], $actual[$key], $message);
+        }
+    }
+
+    public function eifPartialMatchProvider() {
+        return $this->eifPartialExamples('match');
+    }
+
+    protected function eifPartialExamples($suffix) {
+        $this->setUp();
+        $jsons = glob($this->eif_folder . 'partial/*-' . $suffix . '.json');
+        $provider = [];
+
+        foreach ($jsons as $json) {
+            $found = preg_match('/^(?P<filename>[0-9]{5}\-v[0-9]+\-[^\-]+)\-' . $suffix . '\.json/', basename($json), $match);
+            if ($found) {
+                $queries = json_decode(file_get_contents($json));
+                foreach ($queries as $query) {
+                    $provider[] = [
+                        (!empty($query->data) ? $query->data : $query),
+                        json_decode($this->convertEifFormat($match['filename'])->getOutput()),
+                        (!empty($query->data) && !empty($query->description) ? $query->description : ''),
+                    ];
+                }
+            }
+        }
+
+        return $provider;
     }
 
     /**
@@ -580,28 +654,27 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group phase1
-     * @dataProvider xpathMatchProvider
+     * @dataProvider htmlXpathMatchProvider
      */
-    public function testJatsToHtmlXpathMatch($file, $method, $arguments, $xpath, $expected, $type) {
+    public function testJatsToHtmlXpathMatch($file, $method, $arguments, $xpath, $expected, $type, $message = '') {
         $actual_html = $this->getActualHtml($file);
         $section = call_user_func_array([$actual_html, $method], $arguments);
         $actual = $this->runXpath($section, $xpath, $type);
         if ($type == 'string') {
-            $this->assertEquals($expected, $actual);
+            $this->assertEquals($expected, $actual, $message);
         }
         else {
-            $this->assertEqualHtml($expected, $actual);
+            $this->assertEqualHtml($expected, $actual, $message);
         }
     }
 
-    public function xpathMatchProvider() {
-        return $this->xpathExamples('match');
+    public function htmlXpathMatchProvider() {
+        return $this->htmlXpathExamples('match');
     }
 
-    protected function xpathExamples($suffix) {
+    protected function htmlXpathExamples($suffix) {
         $this->setUp();
-        $jsons = glob($this->xpath_folder . '*-' . $suffix . '.json');
+        $jsons = glob($this->html_folder . 'xpath/*-' . $suffix . '.json');
         $provider = [];
 
         foreach ($jsons as $json) {
@@ -617,6 +690,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
                         $query->xpath,
                         (isset($query->string)) ? $query->string : $query->html,
                         (isset($query->string)) ? 'string' : 'html',
+                        (isset($query->description)) ? $query->description : '',
                     ];
                 }
             }
@@ -721,7 +795,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     /**
      * Compare two HTML fragments.
      */
-    protected function assertEqualHtml($expected, $actual) {
+    protected function assertEqualHtml($expected, $actual, $message = '') {
         $from = [
             '/\>[^\S ]+/s',
             '/[^\S ]+\</s',
@@ -740,7 +814,8 @@ class simpleTest extends PHPUnit_Framework_TestCase
         ];
         $this->assertEquals(
             ConvertXMLToHtml::tidyHtml(preg_replace($from, $to, $expected)),
-            ConvertXMLToHtml::tidyHtml(preg_replace($from, $to, $actual))
+            ConvertXMLToHtml::tidyHtml(preg_replace($from, $to, $actual)),
+            $message
         );
     }
 
@@ -755,5 +830,98 @@ class simpleTest extends PHPUnit_Framework_TestCase
         }
 
         return trim($innerHTML);
+    }
+
+    /**
+     * Asserts that two Eif JSON structures are equal.
+     *
+     * @param  object|array $expected
+     * @param  object|array $actual
+     * @param  string $message
+     */
+    public function assertEifJsonEquals($expected, $actual, $message = '') {
+        $expected = $this->normaliseEifJson($expected);
+        $actual = $this->normaliseEifJson($actual);
+        $this->assertEquals($expected, $actual, $message);
+    }
+
+    /**
+     * Brings the keys of objects to a deterministic order to enable comparison
+     * of Eif JSON structures
+     *
+     * If an ordinal is detected in the keys of an object than for comparison we
+     * are converting these to an array. The structure of the objects that we
+     * are comparing are different to the original but it will throw a
+     * meaningful error message. Otherwise, there is no way to detect the
+     * difference between:
+     *
+     * "citations": {
+     *   "bib1": {},
+     *   "bib2": {}
+     * }
+     *
+     * and
+     *
+     * "citations": {
+     *   "bib2": {},
+     *   "bib1": {}
+     * }
+     *
+     * For comparison purposes if an ordinal is detected then we care about the
+     * difference so in the normalisation process the above is converted to:
+     *
+     * "citations": [
+     *   {"bib1": {}},
+     *   {"bib2": {}}
+     * ]
+     *
+     * and
+     *
+     * "citations": [
+     *   {"bib2": {}},
+     *   {"bib1": {}}
+     * ]
+     *
+     * @param mixed $element The element to normalise.
+     *
+     * @return mixed The same data with all object keys ordered in a
+     *               deterministic way.
+     */
+    private function normaliseEifJson($element) {
+        if (is_array($element)) {
+            foreach ($element as &$item) {
+                $item = $this->normaliseEifJson($item);
+            }
+        }
+        elseif (is_object($element)) {
+            $element = get_object_vars($element);
+            $ordinals = [];
+            $type = NULL;
+            foreach ($element as $i => $value) {
+                // If ordinal is not found in each key with the same prefix then
+                // consider as if no ordinals had been detected and allow the
+                // object keys to be normalised.
+                $ordinal_found = preg_match('/^(?P<type>[^0-9]*)[0-9]+$/', $i, $match);
+                if (!$ordinal_found || (!is_null($type) && $type != $match['type'])) {
+                    $ordinals = [];
+                    break;
+                }
+                $type = $match['type'];
+                $ordinals[] = [$i => $value];
+            }
+            // Sort element by keys if ordinal is not detected.
+            if (empty($ordinals)) {
+                ksort($element);
+                $element = (object) $element;
+            }
+            // If ordinals are detected than apply an array.
+            else {
+                $element = $ordinals;
+            }
+            foreach ($element as &$item) {
+                $item = $this->normaliseEifJson($item);
+            }
+        }
+        return $element;
     }
 }

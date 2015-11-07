@@ -5,10 +5,10 @@ git clone git@github.com:nlisgo/mc-markup-service.git
 cd mc-markup-service
 ```
 
-Install dependencies with composer:
+Install dependencies:
 
 ```
-composer install
+./setup.sh
 ```
 
 Generate example template output formats:

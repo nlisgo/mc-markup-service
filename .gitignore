@@ -1,3 +1,4 @@
+tests/tmp
 bin
 vendor
-tests/tmp
+bower_components
