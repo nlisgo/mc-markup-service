@@ -2,9 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
 <xsl:import href="fig.xsl"/>
 
-
 <xsl:template match="fig-group">
-<div class="fig-inline-img-set fig-inline-img-set-carousel">
+<div class="fig-inline-img-set-carousel">
 	 <div class="elife-fig-slider-wrapper">
 		<div class="elife-fig-slider">
 			<xsl:for-each select="fig">
@@ -17,7 +16,9 @@
 				</xsl:variable>
 				<xsl:if test="not(@specific-use)">
 					<div class="elife-fig-slider-img elife-fig-slider-primary">
-						<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
+						 <a href="#{@id}">
+							<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
+						 </a>
    					</div>
 				</xsl:if>
 			</xsl:for-each>
@@ -34,7 +35,9 @@
 						</xsl:variable>
 						<xsl:if test="@specific-use">
 							 <div class="elife-fig-slider-img elife-fig-slider-secondary">
-								<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
+								<a href="#{@id}">
+									<img src="[graphic-{$figLinkFile}-small]" alt="{$title}"/>
+								</a>
 			    				</div>
 						</xsl:if>
 					</xsl:for-each>

@@ -22,7 +22,7 @@
 		<div class="elife-inline-video">
 			<xsl:value-of select="$videoFile"/>
 			<div class="elife-video-links"><span class="elife-video-link elife-video-link-download">
-				<a href="{$VideoLink}">Download Video</a></span>
+				<a href="{$VideoLink}" download="">Download Video</a></span>
 			</div>
 		</div>
 	</div>

@@ -77,7 +77,7 @@
 
 <xsl:template match="front-stub/article-id">
 <div class="elife-article-{$subArticleType}-doi">
-    <strong>DOI: </strong><a href="{concat('/lookup/doi/', $doi)}">http://dx.doi.org/<xsl:value-of select="."/></a>
+    <strong>DOI:</strong><a href="{concat('/lookup/doi/', $doi)}">http://dx.doi.org/<xsl:value-of select="."/></a>
 
 </div>
 </xsl:template>
