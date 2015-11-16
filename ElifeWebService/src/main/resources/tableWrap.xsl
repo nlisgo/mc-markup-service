@@ -31,7 +31,7 @@
 	<p><xsl:apply-templates/></p>
 </xsl:template>
 <xsl:template match="table">
-	<table frame="hsides" rules="groups">
+	<table>
 		<xsl:apply-templates select="thead"/>
 		<xsl:apply-templates select="tbody"/>
 	</table>
@@ -54,19 +54,32 @@
 				
 		</xsl:when>
 		<xsl:otherwise>
-			<td rowspan="1" colspan="1"><xsl:apply-templates/></td>
+			<xsl:choose>
+				<xsl:when test="@rowspan">
+					<td rowspan="{@rowspan}"><xsl:apply-templates/></td>
+				</xsl:when>
+				<xsl:when test="@colspan">
+					<td colspan="{@colspan}"><xsl:apply-templates/></td>
+				</xsl:when>
+				<xsl:otherwise>
+					<td><xsl:apply-templates/></td>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:otherwise>
 	</xsl:choose>
 	
 </xsl:template>
 
 <xsl:template match="inline-formula">
-	<td rowspan="1" colspan="1"><span class="inline-formula"><span class="mathjax mml-math">
-			<xsl:apply-templates select="mml:math"/>
+	<td><span class="inline-formula"><span class="mathjax mml-math">
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<xsl:copy-of select="mml:math/mml:mtable"/>
+			</math>
+			
 	</span></span></td>
 </xsl:template>
 
-<xsl:template match="node()|@*">
+<!-- <xsl:template match="node()|@*">
 <xsl:copy>
 	<xsl:apply-templates select="node()|@*"/>
 </xsl:copy>
@@ -97,7 +110,7 @@
 	</xsl:choose>
 	
 </xsl:template>
-
+ -->
 <xsl:template match="@overflow|@id"/>
 
 <xsl:template match="*[@ref-type = 'bibr' and @rid]">

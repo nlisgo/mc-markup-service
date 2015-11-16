@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
+
 <xsl:import href="supplementary-material.xsl"/>
 <xsl:template match="/">
 <html>
@@ -23,7 +24,7 @@
                 		<a href="[graphic-{$linkFile}-large]" class="figure-expand-popup" title="{$title}"><img data-img="[graphic-{$linkFile}-small]" src="[graphic-{$linkFile}-medium]" alt="{$title}" /></a>
             		</div>
 			<div class="fig-caption">
-				<span class="elife-figure-links"><span class="elife-figure-link elife-figure-link-download"><a href="[graphic-{$linkFile}-large-download]">Download figure</a></span><span class="elife-figure-link elife-figure-link-newtab"><a href="[graphic-{$linkFile}-large]" target="_new">Open in new tab</a></span></span>
+				<span class="elife-figure-links"><span class="elife-figure-link elife-figure-link-download"><a href="[graphic-{$linkFile}-large]"  download="">Download figure</a></span><span class="elife-figure-link elife-figure-link-newtab"><a href="[graphic-{$linkFile}-large]"  target="_blank">Open in new tab</a></span></span>
 				<xsl:apply-templates select="label"/>
 				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="caption"/>
