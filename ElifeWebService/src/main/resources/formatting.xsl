@@ -7,6 +7,13 @@
 <xsl:template match="*[@ext-link-type = 'uri' and @xlink:href]">
 			 <a href="{@xlink:href}"><xsl:apply-templates/></a>
 </xsl:template>
+<xsl:template match="inline-graphic['@xlink:href']">
+	<xsl:variable name="inlineGraphics">
+		<xsl:value-of select="concat(' [inline-graphic-',@xlink:href,'-research-fig] ')"/>
+	</xsl:variable>
+	<xsl:value-of select="$inlineGraphics"/>
+</xsl:template>
+
 <xsl:template match="italic">
     <em>
       <xsl:apply-templates/>

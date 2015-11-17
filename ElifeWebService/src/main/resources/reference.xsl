@@ -28,21 +28,34 @@
 	<xsl:apply-templates select="article-title"/>
 	<div class="elife-reflink-authors">
 		<xsl:apply-templates select="person-group[@person-group-type='author']/name"/>
+		<xsl:apply-templates select="person-group[@person-group-type='author']/collab"/>
 		<xsl:apply-templates select="person-group[@person-group-type='author']/etal"/>
 	</div>
 	 <div class="elife-reflink-details">
 		<xsl:apply-templates select="source"/>
-                <xsl:apply-templates select="volume"/>
-		<xsl:if test="fpage">
+        <xsl:apply-templates select="volume"/>
+                
+      	   
+		<xsl:if test="fpage and lpage">
 			<span class="elife-reflink-details-pages"><xsl:apply-templates select="fpage"/>-<xsl:apply-templates select="lpage"/></span>, 
 		</xsl:if>
-                <xsl:apply-templates select="publisher-name"/>
+		<xsl:if test="fpage and not(lpage)">
+			<span class="elife-reflink-details-pages"><xsl:apply-templates select="fpage"/></span>, 
+		</xsl:if>
+        <xsl:apply-templates select="publisher-name"/>
 		<xsl:apply-templates select="publisher-loc"/>
 		<xsl:apply-templates select="year"/>
 		<xsl:if test="pub-id">
                 <div class="elife-reflink-doi-cited-wrapper">
                     <span class="elife-reflink-details-doi"><a href="http://dx.doi.org/{pub-id}" target="_blank">http://dx.doi.org/<xsl:value-of select="pub-id"/></a></span>
                 </div>
+		</xsl:if>
+		<xsl:if test="ext-link">
+			<div class="elife-reflink-doi-cited-wrapper">		
+                    <span class="elife-reflink-details-uri">		
+                        <a href="{ext-link}" target="_blank"><xsl:value-of select="ext-link"/></a>		
+                    </span>		
+	        </div>
 		</xsl:if>
 	</div>
 </xsl:template>
@@ -52,6 +65,9 @@
 	<xsl:choose>
 		<xsl:when test="../pub-id">
 			<a href="http://dx.doi.org/{../pub-id}" target="_blank"><span class="nlm-article-title"><xsl:apply-templates/></span></a>
+		</xsl:when>
+	    <xsl:when test="../ext-link">
+			<a href="{../ext-link['@xlink:href']}" target="_blank"><span class="nlm-article-title"><xsl:apply-templates/></span></a>
 		</xsl:when>
 		<xsl:otherwise>
 			<span class="nlm-article-title"><xsl:apply-templates/></span>
@@ -77,6 +93,10 @@
 	<span class="elife-reflink-author">
 		<a href="http://scholar.google.com/scholar?q=&quot;author:{$authorname}&quot;" target="_blank"><xsl:value-of select="$authorname"/></a>
 	</span>
+</xsl:template>
+
+<xsl:template match="person-group/collab">
+	 <span class="nlm-collab"><xsl:apply-templates/></span>
 </xsl:template>
 <xsl:template match="source">
 	<span class="elife-reflink-details-journal"><span class="nlm-source"><xsl:apply-templates/></span></span>, 
