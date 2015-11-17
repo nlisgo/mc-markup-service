@@ -21,10 +21,37 @@
 	<div class="elife-fig-image-caption-wrapper">
 		<div class="fig-expansion">
 			<div class="fig-inline-img">
-                		<a href="[graphic-{$linkFile}-large]" class="figure-expand-popup" title="{$title}"><img data-img="[graphic-{$linkFile}-small]" src="[graphic-{$linkFile}-medium]" alt="{$title}" /></a>
-            		</div>
+			
+				<xsl:if test="contains($title,'Figure')">
+					<a href="[graphic-{$linkFile}-large]" class="figure-expand-popup" title="{$title}"><img data-img="[graphic-{$linkFile}-small]" src="[graphic-{$linkFile}-medium]" alt="{$title}" /></a>
+				</xsl:if>
+				<xsl:if test="contains($title,'Animation')">
+					<a href="[animation-{$linkFile}-large]" class="figure-expand-popup" title="{$title}"><img data-img="[animation-{$linkFile}-small]" src="[animation-{$linkFile}-medium]" alt="{$title}" /></a>
+				</xsl:if>
+                		
+            </div>
 			<div class="fig-caption">
-				<span class="elife-figure-links"><span class="elife-figure-link elife-figure-link-download"><a href="[graphic-{$linkFile}-large]"  download="">Download figure</a></span><span class="elife-figure-link elife-figure-link-newtab"><a href="[graphic-{$linkFile}-large]"  target="_blank">Open in new tab</a></span></span>
+				<span class="elife-figure-links">
+					
+					<xsl:if test="contains($title,'Figure')">
+						<span class="elife-figure-link elife-figure-link-download">
+							<a href="[graphic-{$linkFile}-large]"  download="">Download figure</a>
+						</span>
+						<span class="elife-figure-link elife-figure-link-newtab">
+							<a href="[graphic-{$linkFile}-large]"  target="_blank">Open in new tab</a>
+						</span>
+					</xsl:if>
+					
+					<xsl:if test="contains($title,'Animation')">
+						<span class="elife-figure-link elife-figure-link-download">
+							<a href="[animation-{$linkFile}-large]"  download="">Download figure</a>
+						</span>
+						<span class="elife-figure-link elife-figure-link-newtab">
+							<a href="[animation-{$linkFile}-large]"  target="_blank">Open in new tab</a>
+						</span>
+					</xsl:if>
+					
+				</span>
 				<xsl:apply-templates select="label"/>
 				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="caption"/>
