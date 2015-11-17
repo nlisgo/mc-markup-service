@@ -59,7 +59,6 @@
 		</xsl:if>
 	</div>
 </xsl:template>
-
 <xsl:template match="article-title">
 <cite class="elife-reflink-title">
 	<xsl:choose>
