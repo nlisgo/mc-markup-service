@@ -656,6 +656,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group phase1
      * @dataProvider htmlXpathMatchProvider
      */
     public function testJatsToHtmlXpathMatch($file, $method, $arguments, $xpath, $expected, $type, $message = '') {
