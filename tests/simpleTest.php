@@ -643,7 +643,7 @@ class simpleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group phase2
+     * @group phase1
      * @dataProvider jatsToHtmlReferenceProvider
      */
     public function testJatsToHtmlReference($expected, $actual) {
