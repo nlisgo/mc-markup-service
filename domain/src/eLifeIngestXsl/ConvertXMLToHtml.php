@@ -482,9 +482,8 @@ class ConvertXMLToHtml {
    * @return string
    */
   public function getReference($bib_id) {
-    // @todo - elife - nlisgo - need referenceSingle.xsl
-    $this->setXSL('referenceSingle');
-    return $this->getSection("//ref-list/ref[@id='" . $bib_id . "']");
+    // Filter the output of getReferences by the bib id.
+    return $this->getHtmlXpath('getReferences', NULL, "//*[@id='" . $bib_id . "']");
   }
 
   /**
