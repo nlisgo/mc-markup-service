@@ -65,6 +65,13 @@
                     </span>		
 	        </div>
 		</xsl:if>
+		<xsl:if test="comment/ext-link">
+			<div class="elife-reflink-doi-cited-wrapper">		
+                    <span class="elife-reflink-details-uri">		
+                        <a href="{comment/ext-link}" target="_blank"><xsl:value-of select="comment/ext-link"/></a>		
+                    </span>		
+	        </div>
+		</xsl:if>
 	</div>
 </xsl:template>
 <xsl:template match="article-title">
@@ -75,6 +82,9 @@
 		</xsl:when>
 	    <xsl:when test="../ext-link">
 			<a href="{../ext-link['@xlink:href']}" target="_blank"><span class="nlm-article-title"><xsl:apply-templates/></span></a>
+		</xsl:when>
+		<xsl:when test="../comment/ext-link">
+			<a href="{../comment/ext-link['@xlink:href']}" target="_blank"><span class="nlm-article-title"><xsl:apply-templates/></span></a>
 		</xsl:when>
 		<xsl:otherwise>
 			<span class="nlm-article-title"><xsl:apply-templates/></span>
