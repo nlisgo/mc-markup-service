@@ -25,14 +25,22 @@
 </xsl:template>
 <xsl:template match="element-citation">
 	
+	<xsl:if test="not(article-title)">
+		<cite class="elife-reflink-title">
+			<span class="nlm-source"><xsl:value-of select="source"/></span>
+		</cite>
+	</xsl:if>
 	<xsl:apply-templates select="article-title"/>
+	
 	<div class="elife-reflink-authors">
 		<xsl:apply-templates select="person-group[@person-group-type='author']/name"/>
 		<xsl:apply-templates select="person-group[@person-group-type='author']/collab"/>
 		<xsl:apply-templates select="person-group[@person-group-type='author']/etal"/>
 	</div>
 	 <div class="elife-reflink-details">
-		<xsl:apply-templates select="source"/>
+	 	<xsl:if test="article-title">
+	 		<xsl:apply-templates select="source"/>
+	 	</xsl:if>
         <xsl:apply-templates select="volume"/>
                 
       	   
